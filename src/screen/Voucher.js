@@ -4,10 +4,12 @@ import Header from "../component/Header";
 import BottomTab from "../component/BottomTab";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Cart() {
+export default function Voucher() {
   return (
     <SafeAreaView>
-      <Header />
+      <View style={{ backgroundColor: "#EA5C2B", padding: 15 }}>
+        <Header />
+      </View>
       <BottomTab />
     </SafeAreaView>
   );

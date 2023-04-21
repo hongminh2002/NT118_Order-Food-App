@@ -1,10 +1,13 @@
-import { Icon, SearchBar } from "@rneui/base";
 import React from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 
 export default function Header() {
   return (
-    <View style={{flexDirection:"row", justifyContent:'space-between'}}>
+    <View style={{
+      flexDirection:"row", 
+      justifyContent:'space-between',
+      backgroundColor: "#EA5C2B"
+      }}>
       <Image source={require('../asset/Logo.png')} />
       <View 
         style = {{
