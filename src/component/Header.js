@@ -6,7 +6,8 @@ export default function Header() {
     <View style={{
       flexDirection:"row", 
       justifyContent:'space-between',
-      backgroundColor: "#EA5C2B"
+      backgroundColor: "#EA5C2B",
+      padding:15
       }}>
       <Image source={require('../asset/Logo.png')} />
       <View 
@@ -29,4 +30,3 @@ export default function Header() {
     </View>    
   );
 }
-
