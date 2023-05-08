@@ -4,9 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FontAwesome } from '@expo/vector-icons';
-
-import { StatusBar } from 'expo-status-bar';
 import { ScrollView } from 'react-native-gesture-handler';
+import { FontAwesome5 } from '@expo/vector-icons';
+
 
 const FoodDetail = ({ navigation, route }) => {
   const item = route.params;
@@ -15,7 +15,7 @@ const FoodDetail = ({ navigation, route }) => {
     <SafeAreaView style={{ backgroundColor: 'white' }}>
       <View style={styles.header}>
         <Icon style={{ color: '#FF7F3F' }} name="chevron-left" size={40} onPress={navigation.goBack}></Icon>
-        <Text style={{ fontWeight: 700, fontSize: 20, color: '#FF7F3F' }}>{item.name}</Text>
+        <Text style={{ fontWeight: 700, fontSize: 20, color: '#FF7F3F' }}>Chi Tiết Sản Phẩm</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={true}>
         <View style={styles.backgroundDetails}>
@@ -23,8 +23,17 @@ const FoodDetail = ({ navigation, route }) => {
         </View>
 
         <View style={{ marginHorizontal: 15, }}>
+
           <Text style={{ fontWeight: 700, fontSize: 24, color: '#FF7F3F', marginBottom: 8, }}>{item.name}</Text>
-          <Text style={{ fontWeight: 700, fontSize: 30, marginBottom: 8 }}>{item.price}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ fontWeight: 700, fontSize: 28, marginBottom: 8, }}>{item.price}</Text>
+            <TouchableOpacity>
+            <View style={{ marginRight: 25, right: -210,  }}>
+              <MaterialCommunityIcons style={{backgroundColor: '#FF7F3F', borderRadius: 200, paddingHorizontal: 16, paddingVertical: 14,}} name="cart-plus" size={26} color="white" />
+            </View>
+            </TouchableOpacity>
+          </View>
+
           <View style={{ flexDirection: 'row', marginBottom: 15 }}>
             <View style={styles.starShine}>
               <FontAwesome style={styles.fiveStar} name="star" size={24} color="#ffc107" />
@@ -38,18 +47,23 @@ const FoodDetail = ({ navigation, route }) => {
 
           <View style={{ flexDirection: 'row', marginVertical: 15, }}>
             <Text style={[styles.textCate, styles.textStand]}>Chi tiết</Text>
-            <Text style={[styles.textCate, { color: '#837878' }]} onPress={() => navigation.navigate('DetailReview')}>Đánh giá</Text>
+            <Text style={[styles.textCate, { color: '#837878' }]} onPress={() => navigation.navigate('DetailReview', item)}>Đánh giá</Text>
           </View>
 
-          <Text style={{ fontSize: 16, color: '#837878', fontWeight: 700, lineHeight: 30, }}>Phần nhân của chiếc burger đặc biệt bò phô mai được chế biến từ loại thịt bò chất lượng, với độ đảm bảo, tin cậy cao.
+          <View style={{ height: 260, width: '100%', }}>
+            <Text style={{ fontSize: 16, color: '#837878', fontWeight: 700, lineHeight: 30, }}>{item.details}</Text>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <TouchableOpacity style={styles.contactButton}>
+                <Text style={{ fontSize: 14, fontWeight: 700, color: 'white', marginHorizontal: 5, }}>Xem thêm</Text>
+                <FontAwesome5 name="angle-double-right" size={14} color="white" />
+              </TouchableOpacity>
+            </View>
 
-            Thịt bò sau khi mua về thì làm sạch, qua các bước sơ chế và cụ thể là xông khói nhằm giữ trọn hương vị, độ ngọt và béo của phần thịt...</Text>
-           
-        </View> 
- 
+          </View>
+        </View>
+
       </ScrollView>
-
-    </SafeAreaView>
+    </SafeAreaView >
   )
 }
 
@@ -101,4 +115,16 @@ const styles = StyleSheet.create({
     borderBottomColor: '#FF7F3F',
     borderBottomWidth: 1
   },
+
+  contactButton: {
+    borderRadius: 12,
+    backgroundColor: '#EA5C2B',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 100,
+    height: 25,
+    marginTop: 10,
+  },
+
 })

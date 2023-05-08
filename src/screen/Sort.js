@@ -1,15 +1,10 @@
 import { Image, Button, StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-
-import { StatusBar } from 'expo-status-bar';
+import {MaterialCommunityIcons, Feather } from '@expo/vector-icons'; 
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import categories from '../component/Home/Categories';
-import Checkbox from '../component/Sort/CheckBox';
-import SortReview from '../component/Sort/SortReview';
-import SortMoney from '../component/Sort/SortMoney';
+import Checkbox from '../component/Sort/CheckBox'; 
 
 const Sort = ({navigation}) => {
   const SortInfo = ({ item }) => {
@@ -28,9 +23,8 @@ const Sort = ({navigation}) => {
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1, }}>
 
-      <View style={styles.header}>
-        <Icon name="chevron-left" size={40}></Icon>
-        <Text style={{ fontWeight: 700, fontSize: 20 }}>Sắp Xếp</Text>
+      <View style={styles.header}> 
+        <Feather style= {{fontWeight: 700, paddingVertical: 5,}} name="x" size={40} color="#e7613c" />
       </View>
 
       <ScrollView >
@@ -95,8 +89,7 @@ const Sort = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    paddingVertical: 10,
+  header: { 
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,

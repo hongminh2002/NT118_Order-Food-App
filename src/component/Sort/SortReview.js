@@ -1,8 +1,7 @@
 import { Image, Button, StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+ import { FontAwesome,Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ScrollView } from 'react-native-gesture-handler';
 import Checkbox from '../Sort/CheckBox';
@@ -13,8 +12,7 @@ const SortReview = ({ navigation }) => {
         <SafeAreaView style={{ backgroundColor: 'white', flex: 1, }}>
 
             <View style={styles.header}>
-                <Icon name="chevron-left" size={40}></Icon>
-                <Text style={{ fontWeight: 700, fontSize: 20 }}>Sắp Xếp</Text>
+                <Feather style={{ fontWeight: 700, paddingVertical: 5, }} name="x" size={40} color="#e7613c" />
             </View>
 
             <ScrollView >
@@ -104,8 +102,7 @@ const SortReview = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    header: {
-        paddingVertical: 20,
+    header: { 
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 16,
