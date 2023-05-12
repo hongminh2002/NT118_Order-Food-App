@@ -1,69 +1,79 @@
-import React from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import React, {useState, useEffect} from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity, FlatList, StyleSheet, Dimensions } from "react-native";
+import CartData, { foods } from './CartData'
 
-const foods = [
-  {
-    title : "Burger bò phô mai đặc biệt",
-    price:"49,000 VNĐ",
-    image : require('../../asset/BurgerBoDacBiet.png'),
-    quantity:"2"
-  },
-  {
-    title : "Burger 2 lớp bò phô mai",
-    price:"65,000 VNĐ",
-    image : require('../../asset/Burger2Lop.png'),
-    quantity:"2"
-  },
-  {
-    title : "3 miếng gà rán",
-    price:"101,000 VNĐ",
-    image : require('../../asset/3MiengGa.png'),
-    quantity:"1"
+const CartItem = () => {
+
+  const renderItems = (data, index) => {
+      return (
+          <View key={index} style={{ paddingBottom: 15 }}>
+              <View style={styles.foodcard}>
+                  <View style={{width:80, height:80}}>
+                      <Image source={data.image} style={styles.foodimage} />
+                  </View>
+                  <View style={styles.foodinfo}>
+                      <Text style={{ fontSize: 15 }}>
+                          {data.title}
+                      </Text>
+                      <Text style={{ fontSize: 15, fontWeight:'600' }}>
+                          {data.price} 
+                      </Text>
+                  </View>
+                  <View style={{flexDirection:'row', alignSelf:'center', flex:1, justifyContent:'flex-end', marginRight:10}}>
+                    <TouchableOpacity>
+                      <Image source={require('../../asset/VectorMinus.png')} style={{marginRight:5}}/>
+                    </TouchableOpacity>
+                    <Text style={{fontWeight:600, fontSize:17, bottom:5, marginRight:5}}>{data.quantity}</Text>
+                    <TouchableOpacity>
+                      <Image source={require('../../asset/VectorPlusMini.png')} style={{marginRight:5}} />
+                    </TouchableOpacity>
+                  </View>
+              </View>
+          </View>
+      )
   }
-];
 
-export default function CartItem() {
   return (
-    <ScrollView showsVerticalScrollIndicator = {true}>
-        {foods.map((food, index) => (
-        <View 
-            key={index} 
-            style = {{
-                width:"90%",
-                height:81,
-                backgroundColor:"white",
-                borderRadius:12,
-                borderBottomWidth:2,
-                borderBottomColor:"#D9D9D9",
-                marginTop:20,
-                alignSelf:'center',
-                flexDirection:'row',
-                justifyContent:'space-between'
-                }}>
-            <FoodImage food={food} />
-            <FoodInfo food={food} />
-            <View style={{flexDirection:'row', alignSelf:'center'}}>
-            <Image source={require('../../asset/VectorMinus.png')} style={{marginRight:5}}/>
-            <FoodQuantity food={food} />
-            <Image source={require('../../asset/VectorPlusMini.png')} style={{marginRight:5}} />
-            </View>
-        </View>
-        ))}
-    </ScrollView>
-    );
+      <ScrollView>
+          {
+              foods.map(renderItems)
+          }
+      </ScrollView>
+  )
 }
 
-const FoodInfo = (props) => (
-  <View style={{top:20}}>
-    <Text style={{fontSize:15}}>{props.food.title}</Text>
-    <Text style={{fontSize:15, fontWeight:'600'}}> {props.food.price} </Text>
-  </View>
-);
+export default CartItem
 
-const FoodQuantity = (props) => (
-  <Text style={{fontWeight:600, fontSize:17, bottom:5, marginRight:5}}>{props.food.quantity}</Text>
-);
+const deviceWidth = Math.round(Dimensions.get("window").width);
 
-const FoodImage = (props) => (
-  <Image source= {require('../../asset/BurgerBoDacBiet.png')} /> 
-);
+const styles = StyleSheet.create({
+    foodcard: {
+        flexDirection: "row",
+        width: deviceWidth - 40,
+        height: 90,
+        top:10,
+        backgroundColor: "#fff",
+        alignSelf:'center',
+        borderRadius: 12,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 5,
+            height: 5,
+        },
+        shadowOpacity: 0.75,
+        shadowRadius: 5,
+        elevation: 5,
+    },
+
+    foodinfo: {
+        justifyContent:'center',
+        width: '50%',
+        marginLeft:15
+    },
+
+    foodimage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 12,
+    },
+})
