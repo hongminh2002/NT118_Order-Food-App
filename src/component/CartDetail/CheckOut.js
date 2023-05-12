@@ -5,14 +5,11 @@ import DatHangButton from "./DatHangButton";
 export default function CheckOut(){
     return(
         <View style={{
-            height:75,
+            height:'12%',
             borderRadius:12,
             backgroundColor:'#EA5C2B',
-            position:'absolute',
-            left:0,
-            right:0,
-            top:557,
-            flexDirection:'row'
+            flexDirection:'row',
+            alignContent:'center'
         }}>
             <View style={{marginLeft:25, justifyContent:'center'}}>
                 <Text style={{color:'white', fontSize:17, fontWeight:"bold"}}>
