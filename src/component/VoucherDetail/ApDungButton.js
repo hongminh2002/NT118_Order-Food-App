@@ -1,22 +1,25 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { Text, Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
+const windowWidth = Dimensions.get('window').width;
 
 export default function ApDungButton(){
     return(
         <TouchableOpacity style={{
-            padding:7,
-            width:130,
-            marginTop:15,
-            marginLeft:60,
+            width:windowWidth-280,
+            height:'60%',
             backgroundColor:'white',
-            borderRadius:12
+            borderRadius:12,
+            right:10,
+            alignItems:'center',
+            justifyContent:'center'
             }}>
             <Text style={{
                 color:'#FF7F3F', 
                 fontWeight:'bold',
                 fontSize:16,
-                alignSelf:'center'}}>
+                }}>
                     Áp dụng
             </Text>
         </TouchableOpacity>
