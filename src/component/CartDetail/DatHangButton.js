@@ -1,24 +1,27 @@
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Dimensions, Text, TouchableOpacity } from "react-native";
+
+const windowWidth = Dimensions.get('window').width;
 
 export default function DatHangButton(){
     return(
         <TouchableOpacity 
         onPress={this.onPress}
         style={{
-            width:130,
+            width:windowWidth-270,
             height:'60%',
-            marginTop:20,
-            marginLeft:100,
             backgroundColor:'white',
             borderRadius:12, 
-            justifyContent:'center', 
-            alignItems:'center'
+            flexDirection:'row',
+            alignSelf:'center',
+            justifyContent:'center',
+            marginRight:20
             }}>
             <Text style={{
                 color:'#FF7F3F', 
                 fontWeight:'bold',
                 fontSize:16,
+                alignSelf:'center'
             }}>
                     Đặt hàng
             </Text>
