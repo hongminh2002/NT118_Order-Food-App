@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity } from "react-native";
 
 const vouchers = [
   {
@@ -39,25 +39,28 @@ export default function VoucherItem() {
                     borderBottomColor:"#D9D9D9",
                     marginTop:20,
                     alignSelf:'center',
-                    flexDirection:'row',
-                    justifyContent:'space-between'
+                    flexDirection:'row'
                     }}>
                 <VoucherImage voucher={voucher} />
                 <VoucherInfo voucher={voucher} />
-                <Image source={require('../../asset/VectorPlus.png')} style={{top:32, right:15}}/>
+                <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}}>
+                  <Image source={require('../../asset/VectorPlus.png')} style={{alignSelf:'center', justifyContent:'flex-end'}} />
+                </TouchableOpacity>
             </View>
             ))}
         </ScrollView>
     );
 }
 
+const deviceWidth = Dimensions.get('window').width;
+
 const VoucherInfo = (props) => (
-  <View style={{top:20}}>
+  <View style={{width: deviceWidth - 175, alignSelf:'center'}}>
     <Text style={{fontSize:18, fontWeight:'600'}}>{props.voucher.title}</Text>
     <Text> {props.voucher.description} </Text>
   </View>
 );
 
 const VoucherImage = (props) => (
-  <Image source={require('../../asset/VoucherImage.png')} /> 
+  <Image source={props.voucher.image} style={{marginRight:20}} /> 
 );
