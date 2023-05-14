@@ -3,7 +3,7 @@ import {Text, TextInput, SafeAreaView, StyleSheet, TouchableOpacity, View, Image
 import Constants from "expo-constants";
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-const QuenMatKhau = () => {
+const QuenMatKhau = ({navigation}) => {
   return (
     <SafeAreaView style={style.container}>
       <Image source={require('../asset/Nền1.png')} style={style.background1}/>
@@ -31,7 +31,7 @@ const QuenMatKhau = () => {
           </View>
           <View>
             <TouchableOpacity>
-              <Text style={style.signUp}>Chưa có tài khoản? Đăng ký</Text>
+              <Text style={style.signUp} onPress={() => navigation.navigate('DangKy')}>Chưa có tài khoản? Đăng ký</Text>
             </TouchableOpacity>
           </View>
         </View>
