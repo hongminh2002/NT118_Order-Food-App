@@ -4,7 +4,7 @@ import Constants from "expo-constants";
 import { AntDesign } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-const DangNhap = () => {
+const DangNhap = ({navigation}) => {
   return (
     <SafeAreaView style={style.container}>
       <Image source={require('../asset/Nền1.png')} style={style.background1}/>
@@ -44,7 +44,7 @@ const DangNhap = () => {
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('DangKy')}>
               <Text style={style.signUp}>Chưa có tài khoản? Đăng ký</Text>
             </TouchableOpacity>
           </View>
