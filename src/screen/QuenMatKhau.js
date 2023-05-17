@@ -25,7 +25,7 @@ const QuenMatKhau = ({navigation}) => {
                 <TextInput style={style.type} placeholder="Số điện thoại"/>
               </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('XacThuc')}>
               <Text style={style.send}>Gửi</Text>
             </TouchableOpacity>
           </View>
@@ -123,4 +123,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default QuenMatKhau;
+export default QuenMatKhau
