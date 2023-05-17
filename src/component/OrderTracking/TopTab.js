@@ -8,6 +8,7 @@ import Ongoing from './Ongoing';
 import Delivering from './Delivering';
 import CompletedOrder from './CompletedOrder';
 import Cancelled from './Cancelled';
+import Waiting from './Waiting';
 import { useFonts } from "expo-font";
 import AppLoading from 'expo-app-loading';
 
@@ -15,9 +16,9 @@ const Tab = createMaterialTopTabNavigator();
 
 const TopTab = () => {
     const [fontsLoaded] = useFonts({
-        "Roboto-Bold": require("../../asset/fonts/Roboto-Bold.ttf"),
-        "Roboto-Medium": require("../../asset/fonts/Roboto-Medium.ttf"),
-        "Roboto-Regular": require("../../asset/fonts/Roboto-Regular.ttf"),
+        "Roboto-Bold": require("../../assets/fonts/Roboto-Bold.ttf"),
+        "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
+        "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
     });
 
     if (!fontsLoaded) {
@@ -28,7 +29,7 @@ const TopTab = () => {
         <Tab.Navigator screenOptions={{
             tabBarLabelStyle: { fontSize: 12, fontFamily: 'Roboto-Medium', textTransform: 'none', },
             tabBarItemStyle: {
-                width: deviceWidth / 4,
+                width: deviceWidth / 5,
                 flex: 1,
                 borderRadius: 10,
             },
@@ -43,6 +44,7 @@ const TopTab = () => {
                 borderRadius: 12
             }
         }}>
+            <Tab.Screen name="Chờ xác nhận" component={Waiting} />
             <Tab.Screen name="Đang thực hiện" component={Ongoing} />
             <Tab.Screen name="Đang vận chuyển" component={Delivering} />
             <Tab.Screen name="Đã hoàn thành" component={CompletedOrder} />

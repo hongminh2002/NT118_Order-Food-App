@@ -22,7 +22,7 @@ const Title = () => {
                 <FontAwesome5 name="chevron-left" size={20} color="#000000" />
             </TouchableOpacity>
             <View style={styles.title}>
-                <Text style={{ fontFamily: "Roboto-Bold", fontSize: 15, }}>Lịch sử đặt hàng</Text>
+                <Text style={{ fontFamily: "Roboto-Bold", fontSize: 18, }}>Lịch sử đặt hàng</Text>
             </View>
         </View>
     )
@@ -32,24 +32,24 @@ const deviceWidth = Math.round(Dimensions.get("window").width);
 
 const styles = StyleSheet.create({
     titlebox: {
-        height: 50,
         backgroundColor: '#FFFFFF',
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        elevation: 1,
-        
+        //elevation: 1,
+        borderBottomWidth: 1,
+        borderColor: '#E5E5E5',
     },
     title: {
         width: deviceWidth,
         justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
+        //alignItems: 'center',
+        //position: 'absolute',
     },
     icon: {
-        position: 'absolute',
-        alignItems: 'flex-start',
-        paddingLeft: 15,
+        //position: 'absolute',
+        //alignItems: 'flex-start',
+        marginHorizontal: 10,
     }
 });
 
