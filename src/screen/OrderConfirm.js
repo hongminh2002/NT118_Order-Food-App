@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Title from '../component/OrderConfirm/Title';
 import UserInformation from '../component/OrderConfirm/UserInformation';
 import OrderDetail from '../component/OrderConfirm/OrderDetail';
