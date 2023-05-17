@@ -1,16 +1,21 @@
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Dimensions, TextInput, Image } from 'react-native'
 import React, { useState } from 'react'
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { MenuItems } from './MenuData';
-import { Image } from 'expo-image';
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Demo = () => {
+const Categories = () => {
     const [currentSelected, setCurrentSelected] = useState([0]);
+    const [searchText, setSearchText] = useState('');
+    const filteredFoods = () => MenuItems[currentSelected].fooditems.filter(eachFood => eachFood.name.toLowerCase().includes(searchText.toLowerCase()))
+
+    const navigation = useNavigation();
 
     const renderCategories = ({ item, index }) => {
         return (
-            <TouchableOpacity activeOpacity={0.9} onPress={() => setCurrentSelected(index)}>
+            <TouchableOpacity activeOpacity={0.9} onPress={() => setCurrentSelected([index])}>
                 <View style={[styles.box, { backgroundColor: currentSelected == index ? '#rgba(255, 127, 63, 0.25)' : '#fff', }]}>
                     <View style={{ width: 50, height: 50 }}>
                         <Image
@@ -20,23 +25,35 @@ const Demo = () => {
                     </View>
                     <Text style={styles.label}>{item.text}</Text>
                 </View>
+                {/* <FlatList
+                        data={item.fooditems}
+                        renderItem={({item}) => renderItems(item)}
+                        keyExtractor={(item) => item.id.toString()}
+                        showsVerticalScrollIndicator={false}
+                    /> */}
             </TouchableOpacity>
         )
     }
 
-    const renderItems = (data, index) => {
+    const renderItems = (item) => {
+        console.log('Item:', item);
         return (
-            <TouchableOpacity key={index} style={{ paddingBottom: 15 }}>
+            <TouchableOpacity
+                key={item.id}
+                activeOpacity={0.9}
+                style={{ paddingBottom: 15 }}
+                onPress={() => navigation.navigate('Chi tiết sản phẩm', item)}
+            >
                 <View style={styles.foodcard}>
-                    <View style={{width: 150, height: 150}}>
-                        <Image source={data.foodimage} style={styles.foodimage} />
+                    <View style={{ width: 150, height: 150 }}>
+                        <Image source={item.image} style={styles.foodimage} />
                     </View>
                     <View style={styles.foodinfo}>
                         <Text style={{ fontFamily: "Roboto-Regular", fontSize: 12 }}>
-                            {data.foodname}
+                            {item.name}
                         </Text>
                         <Text style={{ fontFamily: "Roboto-Medium", fontSize: 12 }}>
-                            {data.price} VNĐ
+                            {item.price} VNĐ
                         </Text>
                     </View>
                     <TouchableOpacity style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingBottom: 10 }}>
@@ -53,6 +70,7 @@ const Demo = () => {
     const [fontsLoaded] = useFonts({
         "Roboto-Bold": require("../../asset/fonts/Roboto-Bold.ttf"),
         "Roboto-Medium": require("../../asset/fonts/Roboto-Medium.ttf"),
+        "Roboto-Regular": require("../../asset/fonts/Roboto-Regular.ttf"),
     });
 
     if (!fontsLoaded) {
@@ -60,14 +78,65 @@ const Demo = () => {
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
+            <View style={[styles.header]}>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        marginRight: 10,
+                        alignItems: "center",
+                        backgroundColor: 'white',
+                        borderWidth: 1,
+                        borderRadius: 20,
+                        borderColor: '#D9D9D9',
+                    }}
+                >
+                    <TextInput placeholder="Search..."
+                        onChangeText={(text) => {
+                            setSearchText(text)
+                        }}
+                        style={{
+                            backgroundColor: 'white',
+                            fontSize: 16,
+                            paddingLeft: 5,
+                            borderRadius: 20,
+                            width: 244,
+                            marginEnd: 10,
+                        }}
+                    />
+                    <Ionicons
+                        name="search"
+                        style={{
+                            fontSize: 25,
+                            color: "#7A7A7A",
+                            opacity: 0.8,
+                            paddingRight: 5,
+                            alignSelf: "center",
+                        }}
+                    />
+                </View>
+                <TouchableOpacity style={{ paddingRight: 10 }}>
+                    <Ionicons
+                        name="filter"
+                        style={{
+                            fontSize: 25,
+                            color: "white",
+                            opacity: 0.8,
+                            marginHorizontal: 5,
+                        }}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Image source={require('../../asset/Cart.png')} />
+                </TouchableOpacity>
+            </View>
             <ScrollView>
                 <View style={styles.container}>
                     <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 15, marginBottom: 10 }}>
                         DANH MỤC
                     </Text>
                     <FlatList
-                        horizontal={true}
+                        horizontal
                         data={MenuItems}
                         renderItem={renderCategories}
                         showsHorizontalScrollIndicator={false}
@@ -78,19 +147,60 @@ const Demo = () => {
                         </Text>
                     </View>
                 </View>
-                {
+                {filteredFoods().length > 0 ? 
+                <FlatList
+                    data={filteredFoods()}
+                    renderItem={({ item }) => renderItems(item)}
+                    keyExtractor={(item) => item.id.toString()}
+                    showsVerticalScrollIndicator={false}
+                /> : 
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ color: 'black', }}>No food found</Text>
+                </View>}
+                {/* {
                     MenuItems[currentSelected].fooditems.map(renderItems)
-                }
+                } */}
             </ScrollView>
         </View>
     )
 }
 
-export default Demo
+export default Categories
 
 const deviceWidth = Math.round(Dimensions.get("window").width);
 
 const styles = StyleSheet.create({
+    header: {
+        backgroundColor: '#EA5C2B',
+        padding: 10,
+        height: 50,
+        //width: deviceWidth,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    logo: {
+        height: 20,
+        width: 102,
+        marginRight: 10,
+    },
+    search_input: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    text_input: {
+        backgroundColor: 'white',
+        width: 230,
+        height: 30,
+        right: 5,
+        borderRadius: 30,
+        padding: 6,
+
+    },
+    button: {
+        alignContent: 'center',
+        justifyContent: 'center'
+    },
     container: {
         marginTop: 5,
         paddingTop: 10,
@@ -119,7 +229,6 @@ const styles = StyleSheet.create({
         height: '100%',
         contentFit: 'contain',
     },
-
     foodcard: {
         flexDirection: "row",
         width: deviceWidth - 40,
@@ -142,7 +251,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: 160,
     },
-
     foodimage: {
         width: '100%',
         height: '100%',
