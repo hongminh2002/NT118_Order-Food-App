@@ -36,10 +36,10 @@ const DangNhap = ({navigation}) => {
               <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye}/>
               </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('BottomTab')}>
             <Text style={style.login}>Đăng Nhập</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('QuenMatKhau')}>
               <Text style={style.forgetPassword}>Quên Mật Khẩu?</Text>
             </TouchableOpacity>
           </View>
