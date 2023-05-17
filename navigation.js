@@ -5,13 +5,28 @@ import OrderTracking from './src/component/OrderTracking/TopTab';
 import Home from './src/screen/Home';
 import SortReview from "./src/component/Sort/SortReview";
 import SortMoney from "./src/component/Sort/SortMoney";
-import FoodDetail1 from "./src/component/Menu/FoodDetail1";
-import FoodDetail from "./src/screen/FoodDetail";
 import DetailReview from "./src/component/FoodDetail/DetailReview";
+import FoodDetail from "./src/screen/FoodDetail";
 import Sort from "./src/screen/Sort";
 import Menu from './src/screen/Menu';
 import Categories from './src/component/Menu/Categories';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Voucher from "./src/screen/VoucherScreen/Voucher";
+import ChooseSuccessfully from "./src/screen/VoucherScreen/ChooseSuccessfully";
+import VoucherDescription from "./src/screen/VoucherScreen/VoucherDescription";
+import DangNhap from './src/screen/DangNhap';
+import DangKy from './src/screen/DangKy';
+import Account from './src/screen/Account';
+import Cart from './src/screen/CartScreen/Cart';
+import OrderConfirm from './src/screen/OrderConfirm';
+import ReviewDescription from './src/screen/Rating/ReviewDescription';
+import QuenMatKhau from './src/screen/QuenMatKhau'; 
+import ThongTin from './src/screen/ThongTin';
+import DoiMatKhau from './src/screen/DoiMatKhau';
+import XacThuc from './src/screen/XacThuc'
+import FoodDetail1 from './src/component/Menu/FoodDetail1';
 
+const Stack = createNativeStackNavigator();
 
 const HomeNavigator = () => {
     const Stack = createStackNavigator();
@@ -47,4 +62,55 @@ const MenuNavigator = () => {
     )
 }
 
-export { HomeNavigator, MenuNavigator };
+const VoucherStack = () => {
+    return (
+        <NavigationContainer independent={true}>
+            <Stack.Navigator  initialRouteName='Voucher' screenOptions={{headerShown:false}}>
+                <Stack.Screen name='Voucher' component={Voucher} />
+                <Stack.Screen name='VoucherDescription' component={VoucherDescription} />
+                <Stack.Screen name='ChooseSuccessfully' component={ChooseSuccessfully} />
+                <Stack.Screen name='Cart' component={Cart} />
+                <Stack.Screen name='OrderConfirm' component={OrderConfirm} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
+
+const ProfileStack = () => {
+    return(
+        <NavigationContainer independent={true}>
+            <Stack.Navigator initialRouteName='Account' screenOptions={{headerShown:false}}>
+                <Stack.Screen name='DangNhap' component={DangNhap} />
+                <Stack.Screen name='DangKy' component={DangKy} />
+                <Stack.Screen name='Account' component={Account} />
+                <Stack.Screen name='QuenMatKhau' component={QuenMatKhau} />
+                <Stack.Screen name='ThongTin' component={ThongTin} />
+                <Stack.Screen name='DoiMatKhau' component={DoiMatKhau} />
+                <Stack.Screen name='XacThuc' component={XacThuc} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
+
+
+const ReviewStack = () => {
+    return (
+        <NavigationContainer independent={true}>
+            <Stack.Navigator screenOptions={{headerShown:false}}>
+                <Stack.Screen name='ReviewDescription' component={ReviewDescription} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
+
+/* const AppStack = () => {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{headerShown:false}}>
+                <Stack.Screen name='HomeNavigator' component={HomeNavigator} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
+} */
+
+export { HomeNavigator, MenuNavigator, VoucherStack, ProfileStack, ReviewStack };
