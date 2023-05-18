@@ -14,7 +14,7 @@ export default function Score(){
                 <View style={{
                     marginLeft:15,
                     width:'30%',
-                    borderRightWidth:'2',
+                    borderRightWidth:2,
                     borderRightColor:'#958B8B'
                 }}>
                     <Text style={{fontSize:35, fontWeight:'700', alignSelf:'center'}}>4.0</Text>
