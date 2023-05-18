@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, } from 'react-native'
+import { View, Text, ScrollView, Dimensions } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import CompletedOrder from '../component/OrderHistory/CompletedOrder';
 
 const OrderConfirm = () => {
     return (
-        <SafeAreaView style={{ backgroundColor: '#D9D9D9', flex: 1 }}>
+        <SafeAreaView style={{ backgroundColor: '#FFF', flex: 1 }}>
             <StatusBar style='auto' />
             <View style={{ marginBottom: 5 }}>
                 <Title />
@@ -21,5 +21,7 @@ const OrderConfirm = () => {
         </SafeAreaView>
     );
 };
+
+const deviceHeight = Math.round(Dimensions.get("window").height);
 
 export default OrderConfirm;

@@ -6,9 +6,9 @@ import AppLoading from 'expo-app-loading';
 
 const Title = () => {
     const [fontsLoaded] = useFonts({
-        "Roboto-Bold": require("../../asset/fonts/Roboto-Bold.ttf"),
-        "Roboto-Medium": require("../../asset/fonts/Roboto-Medium.ttf"),
-        "Roboto-Regular": require("../../asset/fonts/Roboto-Regular.ttf"),
+        "Roboto-Bold": require("../../assets/fonts/Roboto-Bold.ttf"),
+        "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
+        "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
     });
 
     if (!fontsLoaded) {
@@ -19,10 +19,10 @@ const Title = () => {
 
         <View style={styles.titlebox}>
             <TouchableOpacity style={styles.icon}>
-                <FontAwesome5 name="chevron-left" size={20} color="#000000" />
+                <FontAwesome5 name="chevron-left" size={20} color="#000000" style={{textAlign: 'center'}} />
             </TouchableOpacity>
             <View style={styles.title}>
-                <Text style={{ fontFamily: "Roboto-Bold", fontSize: 15, }}>Theo dõi đơn hàng</Text>
+                <Text style={{ fontFamily: "Roboto-Bold", fontSize: 18, }}>Theo dõi đơn hàng</Text>
             </View>
         </View>
     )
@@ -32,24 +32,21 @@ const deviceWidth = Math.round(Dimensions.get("window").width);
 
 const styles = StyleSheet.create({
     titlebox: {
-        height: 50,
-        backgroundColor: '#FFFFFF',
+        width: deviceWidth,
+        //backgroundColor: '#FFFFFF',
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        elevation: 1,
-        
+        //elevation: 2,
+        borderBottomWidth: 1,
+        borderColor: '#E5E5E5',
     },
     title: {
         width: deviceWidth,
         justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
     },
-    icon: {
-        position: 'absolute',
-        alignItems: 'flex-start',
-        paddingLeft: 15,
+     icon: {
+        marginHorizontal: 10,
     }
 });
 

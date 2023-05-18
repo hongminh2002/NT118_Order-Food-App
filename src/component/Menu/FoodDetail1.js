@@ -23,8 +23,12 @@ const DetailReview = ({ navigation, route }) => {
     <View style={{ backgroundColor: 'white', flex: 1 }}>
 
       <View style={styles.header}>
-        <Icon style={{ color: '#FF7F3F' }} name="chevron-left" size={40} onPress={navigation.goBack}></Icon>
-        <Text style={{ fontWeight: 700, fontSize: 20, color: '#FF7F3F' }}>Chi Tiết Sản Phẩm</Text>
+        <TouchableOpacity onPress={navigation.goBack}>
+          <Icon style={{ color: 'black', textAlign: 'center' }} name="chevron-left" size={30}></Icon>
+        </TouchableOpacity>
+        <View style={styles.title}>
+          <Text style={{ fontWeight: 700, fontSize: 18, color: 'black', }}>Chi tiết sản phẩm</Text>
+        </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={true}>
         <View style={styles.backgroundDetails}>
@@ -33,14 +37,15 @@ const DetailReview = ({ navigation, route }) => {
 
         <View style={{ marginHorizontal: 15, }}>
 
-          <Text style={{ fontWeight: 700, fontSize: 24, color: '#FF7F3F', marginBottom: 8, }}>{item.name}</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontWeight: 700, fontSize: 28, marginBottom: 8, }}>{item.price}</Text>
-            <TouchableOpacity>
-              <View style={{ marginRight: 25, right: -210, }}>
-                <MaterialCommunityIcons style={{ backgroundColor: '#FF7F3F', borderRadius: 200, paddingHorizontal: 16, paddingVertical: 14, }} name="cart-plus" size={26} color="white" />
-              </View>
-            </TouchableOpacity>
+          <Text style={{ fontWeight: 700, fontSize: 20, color: '#EA5C2B', marginBottom: 8, }}>{item.name}</Text>
+          <View style={{ flexDirection: 'row', width: deviceWidth }}>
+            <Text style={{ fontWeight: 700, fontSize: 25, marginBottom: 8, }}>{item.price} VNĐ</Text>
+
+            <View style={{ marginRight: 25, right: -170, }}>
+              <TouchableOpacity>
+                <MaterialCommunityIcons style={{ backgroundColor: '#EA5C2B', borderRadius: 200, paddingHorizontal: 16, paddingVertical: 14, }} name="cart-plus" size={26} color="white" />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginBottom: 15 }}>
@@ -53,6 +58,21 @@ const DetailReview = ({ navigation, route }) => {
             </View>
             <Text style={{ marginLeft: 10, fontWeight: 700, fontSize: 16, }}>(17 đánh giá)</Text>
           </View>
+
+          {/* <View style={{ flexDirection: 'row', marginVertical: 15, }}>
+            <Text style={[styles.textCate, { color: '#837878' }]} onPress={() => navigation.navigate('FoodDetail', item)} >Chi tiết</Text>
+            <Text style={[styles.textCate, styles.textStand]}>Đánh giá</Text>
+          </View>
+
+          <View style={{ height: 260, width: '100%', }}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <TouchableOpacity style={styles.contactButton}>
+                <Text style={{ fontSize: 14, fontWeight: 700, color: 'white', marginHorizontal: 5, }}>Xem thêm</Text>
+                <FontAwesome5 name="angle-double-right" size={14} color="white" />
+              </TouchableOpacity>
+            </View>
+
+          </View> */}
         </View>
         <View style={styles.container}>
           <View style={styles.tabs}>
@@ -85,7 +105,7 @@ const DetailReview = ({ navigation, route }) => {
             </View>
 
             <View style={{ width: deviceWidth - 30, }}>
-              <Text style={{ fontSize: 16, color: '#837878', fontWeight: 700, lineHeight: 30, }}>{item.details}</Text>
+              <Text style={{ fontSize: 16, color: '#837878', fontWeight: 700, lineHeight: 30, }}>*Đây là 1 đánh giá*</Text>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 10, }}>
                 <TouchableOpacity style={styles.contactButton}>
                   <Text style={{ fontSize: 14, fontWeight: 700, color: 'white', marginHorizontal: 5, }}>Xem thêm</Text>
@@ -107,15 +127,18 @@ const deviceWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   header: {
-    paddingVertical: 10,
+    width: deviceWidth,
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
+    backgroundColor: '#FF7F3F',
+    padding: 10,
     backgroundColor: 'white',
-    borderWidth: 0.5,
-    borderBottomColor: 'rgba(122, 122, 122, 0.5)',
+    elevation: 2,
   },
-
+  title: {
+    width: deviceWidth,
+    justifyContent: 'center',
+    // alignItems: 'center',
+  },
   backgroundDetails: {
     justifyContent: 'center',
     alignItems: 'center', height: 240,
