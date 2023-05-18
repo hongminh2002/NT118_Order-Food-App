@@ -1,7 +1,9 @@
 import React from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 export default function VoucherDes(){
+    const navigation = useNavigation();
     return(
         <View>
             <View style={{
@@ -12,9 +14,11 @@ export default function VoucherDes(){
                 borderBottomColor:'#989292',
                 borderBottomWidth:1.5
             }}>
+                <TouchableOpacity onPress = {() => navigation.goBack()}>
                 <Image 
                     source={require('../../asset/Exit.png')} 
                     style={{marginLeft:15}} />
+                </TouchableOpacity>
                 <Text style={{
                     fontSize:25, 
                     fontWeight:'bold',
