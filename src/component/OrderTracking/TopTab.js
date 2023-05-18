@@ -16,9 +16,9 @@ const Tab = createMaterialTopTabNavigator();
 
 const TopTab = () => {
     const [fontsLoaded] = useFonts({
-        "Roboto-Bold": require("../../assets/fonts/Roboto-Bold.ttf"),
-        "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
-        "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
+        "Roboto-Bold": require("../../asset/fonts/Roboto-Bold.ttf"),
+        "Roboto-Medium": require("../../asset/fonts/Roboto-Medium.ttf"),
+        "Roboto-Regular": require("../../asset/fonts/Roboto-Regular.ttf"),
     });
 
     if (!fontsLoaded) {

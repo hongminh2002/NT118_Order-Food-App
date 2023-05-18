@@ -6,7 +6,7 @@ import ReviewOverall from "../../component/Review/ReviewOverall";
 import Score from "../../component/Review/Score";
 import ReviewDetail from "../../component/Review/ReviewDetail";
 
-export default function ReviewDescription (){
+export default function ReviewDescription ({navigation}){
     return (
         <SafeAreaView style={{flexDirection:'column', flex:1}}>
             <Header />

@@ -12,11 +12,11 @@ const FoodDetail = ({ navigation, route }) => {
   const item = route.params;
 
   return (
-    <SafeAreaView style={{ backgroundColor: 'white' }}>
+    <View style={{ backgroundColor: 'white', }}> 
       <View style={styles.header}>
         <Icon style={{ color: '#FF7F3F' }} name="chevron-left" size={40} onPress={navigation.goBack}></Icon>
         <Text style={{ fontWeight: 700, fontSize: 20, color: '#FF7F3F' }}>Chi Tiết Sản Phẩm</Text>
-      </View>
+      </View> 
       <ScrollView showsVerticalScrollIndicator={true}>
         <View style={styles.backgroundDetails}>
           <Image source={item.image} style={{ height: 220, width: 220 }} />
@@ -47,14 +47,13 @@ const FoodDetail = ({ navigation, route }) => {
 
           <View style={{ flexDirection: 'row', marginVertical: 15, }}>
             <Text style={[styles.textCate, styles.textStand]}>Chi tiết</Text>
-            <Text style={[styles.textCate, { color: '#837878' }]} onPress={() => navigation.navigate('DetailReview', item)}>Đánh giá</Text>
           </View>
 
           <View style={{ height: 260, width: '100%', }}>
             <Text style={{ fontSize: 16, color: '#837878', fontWeight: 700, lineHeight: 30, }}>{item.details}</Text>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
               <TouchableOpacity style={styles.contactButton}>
-                <Text style={{ fontSize: 14, fontWeight: 700, color: 'white', marginHorizontal: 5, }}>Xem thêm</Text>
+                <Text style={{ fontSize: 16, fontWeight: 700, color: 'white', marginHorizontal: 5, }} onPress={() => navigation.navigate('ReviewDescription')}>Xem đánh giá</Text>
                 <FontAwesome5 name="angle-double-right" size={14} color="white" />
               </TouchableOpacity>
             </View>
@@ -63,7 +62,7 @@ const FoodDetail = ({ navigation, route }) => {
         </View>
 
       </ScrollView>
-    </SafeAreaView >
+    </View >
   )
 }
 
@@ -76,8 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     backgroundColor: 'white',
-    borderBottomWidth: 0.5,
-    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5, 
     borderBottomColor: 'rgba(122, 122, 122, 0.5)',
   },
 
@@ -123,8 +121,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 100,
-    height: 25,
+    width: 150,
+    height: 30,
     marginTop: 10,
   },
 

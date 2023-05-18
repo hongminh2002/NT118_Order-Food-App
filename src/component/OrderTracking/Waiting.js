@@ -5,14 +5,14 @@ import AppLoading from 'expo-app-loading';
 
 const orders = [
     {
-        image: require("../../assets/FoodImages/cheese-burger-deluxe.png"),
+        image: require("../../asset/FoodImage/cheese-burger-deluxe.png"),
         foodname: 'Burger bò phô-mai đặc biệt x2',
         total: '110,000',
         time: '15:45',
         date: '31/3/2023',
     },
     {
-        image: require("../../assets/FoodImages/mcspicy-deluxe.png"),
+        image: require("../../asset/FoodImage/mcspicy-deluxe.png"),
         foodname: 'Burger phi lê gà cay đặc biệt',
         total: '101,000',
         time: '14:00',
@@ -23,9 +23,9 @@ const orders = [
 const Waiting = () => {
 
     const [fontsLoaded] = useFonts({
-        "Roboto-Bold": require("../../assets/fonts/Roboto-Bold.ttf"),
-        "Roboto-Medium": require("../../assets/fonts/Roboto-Medium.ttf"),
-        "Roboto-Regular": require("../../assets/fonts/Roboto-Regular.ttf"),
+        "Roboto-Bold": require("../../asset/fonts/Roboto-Bold.ttf"),
+        "Roboto-Medium": require("../../asset/fonts/Roboto-Medium.ttf"),
+        "Roboto-Regular": require("../../asset/fonts/Roboto-Regular.ttf"),
     });
 
     if (!fontsLoaded) {

@@ -12,6 +12,9 @@ import vouchers from '../component/Home/Vouchers';
 import BottomTab from '../component/BottomTab';
 import Slider from '../component/Home/Slider'
 import AboutUs from '../component/Home/AboutUs';
+import { Dimensions } from 'react-native';
+
+const windowHeight = Dimensions.get('window').height;
 
 const Home = ({ navigation }) => {
 
