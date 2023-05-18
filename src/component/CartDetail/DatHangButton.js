@@ -1,12 +1,14 @@
 import React from "react";
 import { Dimensions, Text, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get('window').width;
 
 export default function DatHangButton(){
+    navigation = useNavigation();
     return(
         <TouchableOpacity 
-        onPress={this.onPress}
+        onPress={() => navigation.navigate('OrderConfirm')}
         style={{
             width:windowWidth-270,
             height:'60%',
