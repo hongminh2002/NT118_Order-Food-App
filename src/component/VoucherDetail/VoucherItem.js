@@ -1,5 +1,6 @@
-import React from "react";
-import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity } from "react-native";
+import React, {useState} from "react";
+import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity, Modal } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 const vouchers = [
   {
@@ -25,31 +26,42 @@ const vouchers = [
 ];
 
 export default function VoucherItem() {
-    return (
-        <ScrollView showsVerticalScrollIndicator = {true}>
-            {vouchers.map((voucher, index) => (
-            <View 
-                key={index} 
-                style = {{
-                    width:"90%",
-                    height:81,
-                    backgroundColor:"white",
-                    borderRadius:12,
-                    borderBottomWidth:2,
-                    borderBottomColor:"#D9D9D9",
-                    marginTop:20,
-                    alignSelf:'center',
-                    flexDirection:'row'
-                    }}>
-                <VoucherImage voucher={voucher} />
-                <VoucherInfo voucher={voucher} />
-                <TouchableOpacity style={{flexDirection:'row', alignItems:'center'}}>
-                  <Image source={require('../../asset/VectorPlus.png')} style={{alignSelf:'center', justifyContent:'flex-end'}} />
-                </TouchableOpacity>
-            </View>
-            ))}
-        </ScrollView>
-    );
+  const navigation = useNavigation();
+  const [addVoucher,setAddVoucher] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  return (
+      <ScrollView showsVerticalScrollIndicator = {true}>
+          {vouchers.map((voucher, index) => (
+          <TouchableOpacity 
+            key={index} 
+            style = {{
+                width:"90%",
+                height:81,
+                backgroundColor:"white",
+                borderRadius:12,
+                borderBottomWidth:2,
+                borderBottomColor:"#D9D9D9",
+                marginTop:20,
+                alignSelf:'center',
+                flexDirection:'row'
+            }}
+            onPress = {() => navigation.navigate('VoucherDescription')}
+          >
+              <VoucherImage voucher={voucher} />
+              <VoucherInfo voucher={voucher} />
+              <TouchableOpacity 
+              style={{flexDirection:'row', alignItems:'center'}}
+              onPress={() => setAddVoucher(!addVoucher)} >
+                {addVoucher ?
+                <Image source={require('../../asset/VectorPlus.png')} style={{alignSelf:'center', justifyContent:'flex-end'}} />
+                : 
+                <Image source={require('../../asset/Tick.png')} style={{alignSelf:'center', justifyContent:'flex-end'}} />
+                }
+              </TouchableOpacity>
+          </TouchableOpacity>
+          ))}
+      </ScrollView>
+  );
 }
 
 const deviceWidth = Dimensions.get('window').width;
