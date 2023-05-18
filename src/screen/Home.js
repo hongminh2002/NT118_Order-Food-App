@@ -13,6 +13,7 @@ import BottomTab from '../component/BottomTab';
 import Slider from '../component/Home/Slider'
 import AboutUs from '../component/Home/AboutUs';
 import { Dimensions } from 'react-native';
+import Header from '../component/Header';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -111,8 +112,10 @@ const Home = ({ navigation }) => {
         </ScrollView>)
     }
     return (
+        <View>
+        <Header/>
         <ScrollView>
-            <SafeAreaView style={{ flex: 1, padding: 18, backgroundColor: 'white', }}>
+            <View style={{ flex: 1, padding: 18, backgroundColor: 'white', }}>
                 <View>
                     <Slider />
                 </View>
@@ -162,7 +165,7 @@ const Home = ({ navigation }) => {
                     </View>
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
-                    <Text style={styles.mainTitle}>Voucher</Text>
+                    <Text style={styles.mainTitle}>Events</Text>
                     <View style={styles.moreView}>
                         <Text style={styles.textMore} >More</Text>
                         <View style={styles.iconMore}>
@@ -170,11 +173,12 @@ const Home = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-                <View>
+                <View style ={{marginBottom: 50}}>
                     <ListVouchers />
                 </View>
-            </SafeAreaView>
+            </View>
         </ScrollView >
+        </View>
     )
 }
 
