@@ -217,7 +217,7 @@ export const MenuItems = [
             {
                 id: '30',
                 image: require("../../asset/FoodImage/8f5tx7nk.png"),
-                foodname: "Combo A2",
+                name: "Combo A2",
                 price: "65,000",
             },
             {
