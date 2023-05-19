@@ -19,14 +19,17 @@ import QuenMatKhau from "./src/screen/QuenMatKhau";
 import ThongTin from "./src/screen/ThongTin";
 
 
-const Stack = createStackNavigator();
-
-
-export default function App() {
+const App = () => {
+  const Stack = createStackNavigator();
+  console.log(Stack);
   return (
-    <BottomTab/>
-
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Đăng nhập' screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Đăng nhập" component={DangNhap} />
+        <Stack.Screen name="BottomTab" component={BottomTab} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-
+export default App;
