@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Image, TouchableOpacity, TextInput, Dimensions } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
 
 const Header = () => {
     const [searchText, setSearchText] = useState('')
+    const navigation = useNavigation();
 
     return (
         <View style={styles.header}>
-            {/* <Image
-                source={require('../../asset/Logo.png')}
-                style={styles.logo}
-            /> */}
             <View
                 style={{
                     flexDirection: "row",
@@ -59,7 +57,7 @@ const Header = () => {
                     }}
                 />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                 <Image source={require('../../asset/Cart.png')} />
             </TouchableOpacity>
         </View>
@@ -73,6 +71,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#EA5C2B',
         padding: 10,
         height: 50,
+        //width: deviceWidth,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
