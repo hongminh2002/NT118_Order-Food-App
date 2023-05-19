@@ -9,7 +9,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const Categories = () => {
     const [currentSelected, setCurrentSelected] = useState([0]);
     const [searchText, setSearchText] = useState('');
-    const filteredFoods = () => MenuItems[currentSelected].fooditems.filter(eachFood => eachFood.name.toLowerCase().includes(searchText.toLowerCase()))
+    let text = searchText.toLowerCase();
+    const filteredFoods = () => MenuItems[currentSelected].fooditems.filter(eachFood => eachFood.name.toLowerCase().match(text))
 
     const navigation = useNavigation();
 
@@ -42,7 +43,7 @@ const Categories = () => {
                 key={item.id}
                 activeOpacity={0.9}
                 style={{ paddingBottom: 15 }}
-                onPress={() => navigation.navigate('Chi tiết sản phẩm', item)}
+                onPress={() => navigation.navigate('FoodDetail', item)}
             >
                 <View style={styles.foodcard}>
                     <View style={{ width: 150, height: 150 }}>
@@ -126,7 +127,7 @@ const Categories = () => {
                         }}
                     />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                     <Image source={require('../../asset/Cart.png')} />
                 </TouchableOpacity>
             </View>
@@ -174,20 +175,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#EA5C2B',
         padding: 10,
         height: 50,
-        //width: deviceWidth,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        elevation: 1,
     },
+
     logo: {
         height: 20,
         width: 102,
         marginRight: 10,
     },
+
     search_input: {
         flexDirection: 'row',
         justifyContent: 'center'
     },
+
     text_input: {
         backgroundColor: 'white',
         width: 230,
@@ -197,10 +201,12 @@ const styles = StyleSheet.create({
         padding: 6,
 
     },
+
     button: {
         alignContent: 'center',
         justifyContent: 'center'
     },
+
     container: {
         marginTop: 5,
         paddingTop: 10,
@@ -227,8 +233,9 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
-        contentFit: 'contain',
+        resizeMode: 'contain',
     },
+
     foodcard: {
         flexDirection: "row",
         width: deviceWidth - 40,
@@ -251,6 +258,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: 160,
     },
+
     foodimage: {
         width: '100%',
         height: '100%',
