@@ -1,18 +1,38 @@
 import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Dimensions, TextInput, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import { MenuItems } from './MenuData';
+//import { MenuItems } from './MenuData';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { auth, app, db, getFirestore, collection, addDoc, getDocs } from '../../../firebase'
 
 const Categories = () => {
     const [currentSelected, setCurrentSelected] = useState([0]);
     const [searchText, setSearchText] = useState('');
-    let text = searchText.toLowerCase();
-    const filteredFoods = () => MenuItems[currentSelected].fooditems.filter(eachFood => eachFood.name.toLowerCase().match(text))
+    const [menuItems, setMenuItems] = useState([]);
+
+    const filteredFoods = menuItems[currentSelected]?.fooditems?.filter(eachFood => eachFood.name.toLowerCase().match(searchText.toLowerCase()))
 
     const navigation = useNavigation();
+
+    const getMenuItems = async () => {
+        const querySnapshot = await getDocs(collection(db, 'MenuItems'));
+
+        const items = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            text: doc.data().text,
+            image: doc.data().image,
+            fooditems: doc.data().fooditems,
+        }));
+        setMenuItems(items);
+
+        console.log(items);
+    };
+
+    useEffect(() => {
+        getMenuItems();
+    }, []);
 
     const renderCategories = ({ item, index }) => {
         return (
@@ -20,7 +40,7 @@ const Categories = () => {
                 <View style={[styles.box, { backgroundColor: currentSelected == index ? '#rgba(255, 127, 63, 0.25)' : '#fff', }]}>
                     <View style={{ width: 50, height: 50 }}>
                         <Image
-                            source={item.image}
+                            source={{ uri: item.image }}
                             style={styles.image}
                         />
                     </View>
@@ -47,7 +67,7 @@ const Categories = () => {
             >
                 <View style={styles.foodcard}>
                     <View style={{ width: 150, height: 150 }}>
-                        <Image source={item.image} style={styles.foodimage} />
+                        <Image source={{ uri: item.image }} style={styles.foodimage} />
                     </View>
                     <View style={styles.foodinfo}>
                         <Text style={{ fontFamily: "Roboto-Regular", fontSize: 12 }}>
@@ -138,26 +158,26 @@ const Categories = () => {
                     </Text>
                     <FlatList
                         horizontal
-                        data={MenuItems}
+                        data={menuItems}
                         renderItem={renderCategories}
                         showsHorizontalScrollIndicator={false}
                     />
                     <View style={styles.categoryname}>
                         <Text style={{ fontFamily: "Roboto-Bold", fontSize: 14, margin: 15 }}>
-                            {MenuItems[currentSelected].text}
+                            {menuItems[currentSelected]?.text}
                         </Text>
                     </View>
                 </View>
-                {filteredFoods().length > 0 ? 
-                <FlatList
-                    data={filteredFoods()}
-                    renderItem={({ item }) => renderItems(item)}
-                    keyExtractor={(item) => item.id.toString()}
-                    showsVerticalScrollIndicator={false}
-                /> : 
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ color: 'black', }}>No food found</Text>
-                </View>}
+                {filteredFoods?.length > 0 ?
+                    <FlatList
+                        data={filteredFoods}
+                        renderItem={({ item }) => renderItems(item)}
+                        //keyExtractor={(item) => (item ? item.id.toString() : '')}
+                        showsVerticalScrollIndicator={false}
+                    /> :
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ color: 'black', }}>No food found</Text>
+                    </View>}
                 {/* {
                     MenuItems[currentSelected].fooditems.map(renderItems)
                 } */}
