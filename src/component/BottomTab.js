@@ -8,7 +8,7 @@ import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { HomeNavigator, MenuNavigator, ProfileStack, VoucherStack } from '../../navigation';
+import { HomeStack, MenuStack, ProfileStack, VoucherStack } from '../../navigation';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -29,9 +29,9 @@ const BottomTab = () => {
 
     return (
         <SafeAreaProvider>
-            <NavigationContainer independent={true}>
+            {/* <NavigationContainer independent={true}> */}
                 <SafeAreaView style={{ flex: 1 }}>
-                    <StatusBar style='dark' />
+                    <StatusBar style='light' />
                     <Tab.Navigator
                         activeColor="#EA5C2B"
                         inactiveColor="#7A7A7A"
@@ -94,13 +94,13 @@ const BottomTab = () => {
                         })
                         }
                     >
-                        <Tab.Screen name="Trang chủ" component={HomeNavigator} />
-                        <Tab.Screen name="Thực đơn" component={MenuNavigator} />
+                        <Tab.Screen name="Trang chủ" component={HomeStack} />
+                        <Tab.Screen name="Thực đơn" component={MenuStack} />
                         <Tab.Screen name="Ưu đãi" component={VoucherStack} />
                         <Tab.Screen name="Cá nhân" component={ProfileStack} /> 
                     </Tab.Navigator>
                 </SafeAreaView>
-            </NavigationContainer>
+            {/* </NavigationContainer> */}
         </SafeAreaProvider>
     );
 }
