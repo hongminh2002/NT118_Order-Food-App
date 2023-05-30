@@ -1,41 +1,54 @@
 import React, { Component } from 'react';
 import { useState } from 'react';
- 
+
 
 import { Text, TextInput, SafeAreaView, StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
 import Constants from "expo-constants";
 import { AntDesign } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { createUserWithEmailAndPassword} from "firebase/auth"; 
-import {auth} from "../firebase"; 
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, setDoc, db, doc } from "../../firebase";
 
 const DangKy = ({ navigation }) => {
- 
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const register = () => {
-    if( name ==="" || phone ==="" || email ==="" || password ==="" ){
+    if (name === "" || phone === "" || email === "" || password === "") {
       Alert.alert('Bạn chưa điền đủ thông tin', 'Vui lòng nhập lại đầy đủ thông tin', [
         {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
       ]);
     }
-    createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-      console.log("userCredential", userCredential);
-      const user = userCredential._tokenResponse.email;
-      const myUserUid = auth.currentUser.uid;
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log("userCredential", userCredential);
+        const user = userCredential._tokenResponse.email;
+        const myUserUid = auth.currentUser.uid;
 
-      setDoc(doc(db, "users", `${myUserUid}`), {
-        email:user,
-        phone:phone,
+        setDoc(doc(db, "users", `${myUserUid}`), {
+          email: user,
+          name: name,
+          phone: phone,
+        })
       })
-    })
+      .catch((error) => {
+        if (error.code == "auth/email-already-in-use") {
+            alert("The email address is already in use");
+        } else if (error.code == "auth/invalid-email") {
+            alert("The email address is not valid.");
+        } else if (error.code == "auth/operation-not-allowed") {
+            alert("Operation not allowed.");
+        } else if (error.code == "auth/weak-password") {
+            alert("The password is too weak.");
+        }
+      });
   }
   return (
     <SafeAreaView style={style.container}>
@@ -72,10 +85,10 @@ const DangKy = ({ navigation }) => {
                 <AntDesign name="user" size={14} color="#B9B9B9" />
               </View>
               <View style={style.type}>
-                <TextInput 
-                value={email}
-                onChangeText={(text) => setEmail(text)}
-                style={style.type} placeholder="Tên đăng nhập" />
+                <TextInput
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
+                  style={style.type} placeholder="Tên đăng nhập" />
               </View>
             </View>
             <View style={style.input}>
@@ -84,8 +97,8 @@ const DangKy = ({ navigation }) => {
               </View>
               <View style={style.typePass} >
                 <TextInput value={password}
-                onChangeText={(text) => setPassword(text)}
-                secureTextEntry={true}  style={style.typePass} placeholder='Mật khẩu' />
+                  onChangeText={(text) => setPassword(text)}
+                  secureTextEntry={true} style={style.typePass} placeholder='Mật khẩu' />
               </View>
               <View style={style.eye}>
                 <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye} />
