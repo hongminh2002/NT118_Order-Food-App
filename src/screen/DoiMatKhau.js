@@ -1,26 +1,68 @@
-import React, {Component} from 'react';
-import {Text, TextInput, SafeAreaView, StyleSheet, TouchableOpacity, View, Image} from 'react-native';
+import React, { Component } from 'react';
+import { Text, TextInput, SafeAreaView, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import Constants from "expo-constants";
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { useState } from 'react';
 
-const DoiMatKhau = ({navigation}) => {
+import { getAuth, signInWithEmailAndPassword, updatePassword } from "firebase/auth";
+
+
+const DoiMatKhau = ({ navigation }) => {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+
+  //change Password
+  const changePassword = (currentPassword, newPassword, newPasswordConfirm) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    // Kiểm tra xem mật khẩu có bằng nhau khum
+    if (newPassword == newPasswordConfirm) {
+      // Xác minh mật khẩu cũ
+      signInWithEmailAndPassword(auth, user.email, currentPassword)
+        .then(() => {
+          // Nếu xác minh thành công, tiến hành thay đổi mật khẩu
+          updatePassword(user, newPassword)
+            .then(() => {
+              alert("Đổi mật khẩu thành công");
+            })
+            .catch((error) => {
+              if (error.code == "auth/email-already-in-use") {
+                alert("The email address is already in use");
+              } else if (error.code == "auth/invalid-email") {
+                alert("The email address is not valid.");
+              } else if (error.code == "auth/operation-not-allowed") {
+                alert("Operation not allowed.");
+              } else if (error.code == "auth/weak-password") {
+                alert("The password is too weak.");
+              }
+            });
+        })
+        .catch((error) => {
+          alert("Xác minh mật khẩu cũ không thành công: " + error.message);
+        });
+    } else {
+      alert("Mật khẩu xác nhận không đúng! Mời nhập lại!")
+    }
+  }
+
   return (
     <SafeAreaView style={style.container}>
-      <Image source={require('../asset/Nền1.png')} style={style.background1}/>
-      <Image source={require('../asset/Nền2.png')} style={style.background2}/>
-      <AntDesign name="close" size={24} color="white" style={{
-          position:'absolute',
-          top: 38,
-          left: 345,
-        }}/>
+      <Image source={require('../asset/Nền1.png')} style={style.background1} />
+      <Image source={require('../asset/Nền2.png')} style={style.background2} />
+      <AntDesign onPress={() => navigation.goBack()}  name="close" size={24} color="white" style={{
+        position: 'absolute',
+        top: 38,
+        left: 345,
+      }} />
       <View style={style.page}>
         <View>
           <Text style={style.pageName}>
             Đổi mật khẩu
           </Text>
         </View>
-        <View style={{flex:1, justifyContent: 'space-between' }}>
+        <View style={{ flex: 1, justifyContent: 'space-between' }}>
           <View style={style.content}>
             <Text style={style.nhap}>Nhập mật khẩu cũ</Text>
             <View style={style.input}>
@@ -28,10 +70,10 @@ const DoiMatKhau = ({navigation}) => {
                 <AntDesign name="lock" size={16} color="#B9B9B9" />
               </View>
               <View style={style.type} >
-                <TextInput style={style.type} placeholder='Mật khẩu'/>
+                <TextInput value={currentPassword} onChangeText={(text) => setCurrentPassword(text)} style={style.type} placeholder='Mật khẩu' />
               </View>
               <View style={style.eye}>
-                <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye}/>
+                <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye} />
               </View>
             </View>
             <Text style={style.nhap}>Nhập mật khẩu mới</Text>
@@ -40,10 +82,11 @@ const DoiMatKhau = ({navigation}) => {
                 <AntDesign name="lock" size={16} color="#B9B9B9" />
               </View>
               <View style={style.type} >
-                <TextInput style={style.type} placeholder='Mật khẩu'/>
+                <TextInput value={newPassword}
+                  onChangeText={(text) => setNewPassword(text)} style={style.type} placeholder='Mật khẩu' />
               </View>
               <View style={style.eye}>
-                <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye}/>
+                <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye} />
               </View>
             </View>
             <Text style={style.nhap}>Xác nhận mật khẩu</Text>
@@ -52,15 +95,18 @@ const DoiMatKhau = ({navigation}) => {
                 <AntDesign name="lock" size={16} color="#B9B9B9" />
               </View>
               <View style={style.type} >
-                <TextInput style={style.type} placeholder='Mật khẩu'/>
+                <TextInput value={newPasswordConfirm}
+                  onChangeText={(text) => setNewPasswordConfirm(text)} style={style.type} placeholder='Mật khẩu' />
               </View>
               <View style={style.eye}>
-                <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye}/>
+                <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye} />
               </View>
             </View>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              changePassword(currentPassword, newPassword, newPasswordConfirm)
+            }}>
               <Text style={style.send}>Đổi mật khẩu</Text>
             </TouchableOpacity>
           </View>
@@ -76,32 +122,32 @@ const TEXT = {
 };
 
 const style = StyleSheet.create({
-  container:{
+  container: {
     flex: 1,
     textAlign: "center",
     backgroundColor: "#fff",
     paddingTop: Constants.statusBarHeight,
   },
   background1: {
-    position:'absolute',
+    position: 'absolute',
     width: '100%',
     height: 450,
   },
   background2: {
-    position:'absolute',
+    position: 'absolute',
     top: 100,
     width: '80%',
     height: 700,
     borderRadius: 30,
-    alignSelf:'center',
+    alignSelf: 'center',
   },
   page: {
     top: 100,
     width: '80%',
     height: 450,
-    alignSelf:'center',
+    alignSelf: 'center',
   },
-  pageName : {
+  pageName: {
     ...TEXT,
     marginTop: 40,
     color: "#EA5C2B",
@@ -118,22 +164,22 @@ const style = StyleSheet.create({
     color: "#EA5C2B",
   },
   icon: {
-    flex:1,
+    flex: 1,
     top: 10,
     left: 15,
   },
   type: {
     fontSize: 12,
-    flex:4,
+    flex: 4,
     color: '#B9B9B9',
   },
-  eye:{
-    flex:1,
+  eye: {
+    flex: 1,
     top: 7,
     left: 5
   },
   input: {
-    flexDirection:'row',
+    flexDirection: 'row',
     marginTop: 8,
     marginBottom: 20,
     height: 39,
