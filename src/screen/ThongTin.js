@@ -4,15 +4,19 @@ import Constants from "expo-constants";
 import { AntDesign } from '@expo/vector-icons'; 
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 const ThongTin = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={style.container}>
       <Image source={require('../asset/Nền1.png')} style={style.background1}/>
       <Image source={require('../asset/Nền3.png')} style={style.background2}/>
       <View style={{height: 51, flexDirection:'row'}}>
         <View style={{flex: 2}}>
-          <FontAwesome name="user-circle-o" size={40} color="white" style={{
+          <FontAwesome onPress={() => navigation.navigate('Account')} name="user-circle-o" size={40} color="white" style={{
             left: 20,
           }}/>
         </View>
@@ -20,7 +24,7 @@ const ThongTin = () => {
           <Text style={{color: "#fff", fontSize: 18, fontWeight: "bold", paddingTop: 7}}>Nguyễn Văn A</Text>
         </View>
         <View style={{flex:1, paddingTop: 7}}>
-          <AntDesign name="close" size={24} color="white" />
+          <AntDesign  onPress={() => navigation.goBack()} name="close" size={24} color="white" />
         </View>
       </View>
       <View style={{flex:1, justifyContent: 'space-between'}}>
