@@ -1,16 +1,23 @@
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Dimensions, TextInput, Image } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Dimensions, TextInput, Image, Modal } from 'react-native'
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react'
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 //import { MenuItems } from './MenuData';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { auth, app, db, getFirestore, collection, addDoc, getDocs } from '../../../firebase'
+import { auth, app, db, getFirestore, collection, collectionGroup, addDoc, getDocs, updateDoc, doc, getDoc, query, where } from '../../../firebase'
+//import { onAuthStateChanged } from 'firebase/auth';
+
+let myUserId = '';
 
 const Categories = () => {
     const [currentSelected, setCurrentSelected] = useState([0]);
     const [searchText, setSearchText] = useState('');
     const [menuItems, setMenuItems] = useState([]);
+    const [cartCount, setCartCount] = useState(0);
+    const [modalVisible, setModalVisible] = useState(false);
+    const isFocused = useIsFocused();
 
     const filteredFoods = menuItems[currentSelected]?.fooditems?.filter(eachFood => eachFood.name.toLowerCase().match(searchText.toLowerCase()))
 
@@ -26,13 +33,56 @@ const Categories = () => {
             fooditems: doc.data().fooditems,
         }));
         setMenuItems(items);
-
         console.log(items);
+
     };
 
     useEffect(() => {
         getMenuItems();
     }, []);
+    useEffect(() => {
+        getCartItems();
+    }, [isFocused]);
+    const getCartItems = async () => {
+        {auth.currentUser.uid ? myUserId = auth.currentUser.uid : navigation.navigate('Login')};
+        const docRef = await getDoc(doc(db, 'users', myUserId));
+        setCartCount(docRef.data().cart.length);
+    };
+    const onAddToCart = async (item, index) => {
+        const docRef = await getDoc(doc(db, 'users', `${myUserId}`));
+        if (docRef.exists()) {
+            console.log("Cart data:", docRef.data().cart);
+        } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such cart");
+        }
+
+        // console.log('Document data: ', docRef);
+        let tempDart = [];
+        tempDart = docRef.data().cart;
+        if (tempDart.length > 0) {
+            let existing = false;
+            tempDart.map((eachItem) => {
+                if (eachItem.id == item.id) {
+                    existing = true;
+                    eachItem.qty = eachItem.qty + 1;
+                }
+            });
+            if (existing == false) {
+                tempDart.push(item);
+            }
+            await updateDoc(doc(db, 'users', `${myUserId}`), {
+                cart: tempDart,
+            });
+        } else {
+            tempDart.push(item);
+        }
+        console.log(tempDart);
+        await updateDoc(doc(db, 'users', `${myUserId}`), {
+            cart: tempDart,
+        });
+        getCartItems();
+    };
 
     const renderCategories = ({ item, index }) => {
         return (
@@ -56,13 +106,13 @@ const Categories = () => {
         )
     }
 
-    const renderItems = (item) => {
+    const renderItems = (item, index) => {
         console.log('Item:', item);
         return (
             <TouchableOpacity
                 key={item.id}
                 activeOpacity={0.9}
-                style={{ paddingBottom: 15 }}
+                style={{ paddingVertical: 8 }}
                 onPress={() => navigation.navigate('FoodDetail', item)}
             >
                 <View style={styles.foodcard}>
@@ -77,7 +127,10 @@ const Categories = () => {
                             {item.price} VNĐ
                         </Text>
                     </View>
-                    <TouchableOpacity style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingBottom: 10 }}>
+                    <TouchableOpacity
+                        style={{ justifyContent: "flex-end", alignItems: "flex-end", paddingBottom: 10 }}
+                        onPress={() => { onAddToCart(item, index); }}
+                    >
                         <Image
                             source={require("../../asset/icons/plus.png")}
                             style={{ width: 30, height: 30 }}
@@ -100,6 +153,7 @@ const Categories = () => {
 
     return (
         <View style={{ flex: 1 }}>
+            {/* ----------Header---------- */}
             <View style={[styles.header]}>
                 <View
                     style={{
@@ -136,13 +190,12 @@ const Categories = () => {
                         }}
                     />
                 </View>
-                <TouchableOpacity style={{ paddingRight: 10 }}>
+                <TouchableOpacity style={{ paddingRight: 10 }} onPress={() => setModalVisible(true)}>
                     <Ionicons
-                        name="filter"
+                        name="options"
                         style={{
                             fontSize: 25,
                             color: "white",
-                            opacity: 0.8,
                             marginHorizontal: 5,
                         }}
                     />
@@ -150,8 +203,122 @@ const Categories = () => {
                 <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                     <Image source={require('../../asset/Cart.png')} />
                 </TouchableOpacity>
+                <View style={styles.count}>
+                    <Text style={{ color: '#fff' }}>{cartCount ? cartCount : '0'}</Text>
+                </View>
             </View>
-            <ScrollView>
+            {/* ----------Body---------- */}
+            <View style={{ flex: 1 }}>
+                {/* ----------Sort Modal---------- */}
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <View>
+                                <Text style={{ fontFamily: "Roboto-Bold", fontSize: 14, marginVertical: 10, }}>
+                                    Lọc sản phẩm
+                                </Text>
+                            </View>
+                            <TouchableOpacity style={styles.sort_text}
+                                onPress={() => {
+                                    const filteredFoods = menuItems[currentSelected]?.fooditems?.sort((a, b) => a.name > b.name ? 1 : -1,);
+                                    setModalVisible(false);
+                                }}
+                            >
+                                <Ionicons
+                                    name="text"
+                                    style={{
+                                        paddingLeft: 5,
+                                        fontSize: 20,
+                                        color: "#7A7A7A",
+                                        opacity: 0.8,
+                                        paddingRight: 5,
+                                        alignSelf: "center",
+                                    }}
+                                />
+                                <Text>Lọc theo tên</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.sort_text}
+                                onPress={() => {
+                                    const filteredFoods = menuItems[currentSelected]?.fooditems?.sort((a, b) => a.price - b.price);
+                                    setModalVisible(false);
+                                }}
+                            >
+                                <Ionicons
+                                    name="trending-up"
+                                    style={{
+                                        paddingLeft: 5,
+                                        fontSize: 20,
+                                        color: "#7A7A7A",
+                                        opacity: 0.8,
+                                        paddingRight: 5,
+                                        alignSelf: "center",
+                                    }}
+                                />
+                                <Text>Giá từ thấp đến cao</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.sort_text}
+                                onPress={() => {
+                                    const filteredFoods = menuItems[currentSelected]?.fooditems?.sort((a, b) => b.price - a.price);
+                                    setModalVisible(false);
+                                }}
+                            >
+                                <Ionicons
+                                    name="trending-down"
+                                    style={{
+                                        paddingLeft: 5,
+                                        fontSize: 20,
+                                        color: "#7A7A7A",
+                                        opacity: 0.8,
+                                        paddingRight: 5,
+                                        alignSelf: "center",
+                                    }}
+                                />
+                                <Text>Giá từ cao đến thấp</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.sort_text}
+                                onPress={() => {
+                                    const filteredFoods = menuItems[currentSelected]?.fooditems?.sort(eachFood => eachFood.isFeatured != true ? 1 : -1,);
+                                    setModalVisible(false);
+                                }}
+                            >
+                                <Ionicons
+                                    name="star"
+                                    style={{
+                                        paddingLeft: 5,
+                                        fontSize: 20,
+                                        color: "#7A7A7A",
+                                        opacity: 0.8,
+                                        paddingRight: 5,
+                                        alignSelf: "center",
+                                    }}
+                                />
+                                <Text>Bán chạy nhất</Text>
+                            </TouchableOpacity>
+                            <View style={{ width: '100%', alignItems: 'center', paddingTop: 15, }}>
+                                <TouchableOpacity
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => setModalVisible(!modalVisible)}>
+                                    <Ionicons
+                                        name="close"
+                                        style={{
+                                            fontSize: 25,
+                                            color: "#EA5C2B",
+                                            opacity: 0.8,
+                                            alignSelf: "center",
+                                        }}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                {/* ----------Category---------- */}
                 <View style={styles.container}>
                     <Text style={{ fontFamily: 'Roboto-Bold', fontSize: 15, marginBottom: 10 }}>
                         DANH MỤC
@@ -163,7 +330,7 @@ const Categories = () => {
                         showsHorizontalScrollIndicator={false}
                     />
                     <View style={styles.categoryname}>
-                        <Text style={{ fontFamily: "Roboto-Bold", fontSize: 14, margin: 15 }}>
+                        <Text style={{ fontFamily: "Roboto-Bold", fontSize: 14, marginTop: 10, }}>
                             {menuItems[currentSelected]?.text}
                         </Text>
                     </View>
@@ -171,7 +338,7 @@ const Categories = () => {
                 {filteredFoods?.length > 0 ?
                     <FlatList
                         data={filteredFoods}
-                        renderItem={({ item }) => renderItems(item)}
+                        renderItem={({ item, index }) => renderItems(item, index)}
                         //keyExtractor={(item) => (item ? item.id.toString() : '')}
                         showsVerticalScrollIndicator={false}
                     /> :
@@ -181,7 +348,7 @@ const Categories = () => {
                 {/* {
                     MenuItems[currentSelected].fooditems.map(renderItems)
                 } */}
-            </ScrollView>
+            </View>
         </View>
     )
 }
@@ -194,7 +361,7 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#EA5C2B',
         padding: 10,
-        height: 50,
+        height: 60,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -212,6 +379,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
 
+    sort_text: {
+        width: '80%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 5,
+    },
+
     text_input: {
         backgroundColor: 'white',
         width: 230,
@@ -222,9 +397,36 @@ const styles = StyleSheet.create({
 
     },
 
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#rgba(0,0,0,0.5)',
+    },
+
+    count: {
+        backgroundColor: 'red',
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        position: 'absolute',
+        top: 5,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     button: {
+        borderRadius: 20,
+        padding: 5,
+        elevation: 5,
         alignContent: 'center',
         justifyContent: 'center'
+    },
+
+    buttonClose: {
+        backgroundColor: '#FFF',
+        borderRadius: 45,
     },
 
     container: {
@@ -232,6 +434,8 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         marginLeft: 20,
         marginRight: 20,
+        marginBottom: 5,
+        paddingBottom: 10,
     },
     box: {
         width: 90,
@@ -283,5 +487,23 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 12,
+    },
+    modalView: {
+        width: deviceWidth - 120,
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        paddingHorizontal: 35,
+        paddingVertical: 20,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        justifyContent: 'space-between',
     },
 })
