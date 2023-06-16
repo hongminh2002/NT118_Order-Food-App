@@ -1,11 +1,25 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Image, TouchableOpacity, TextInput, Dimensions } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet, Image, TouchableOpacity, TextInput, Dimensions } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { auth, app, db, getFirestore, collection, collectionGroup, addDoc, getDocs, updateDoc, doc, getDoc, query, where } from '../../../firebase'
 
 const Header = () => {
     const [searchText, setSearchText] = useState('')
+    const [cartCount, setCartCount] = useState(0);
+
     const navigation = useNavigation();
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        getCartItems();
+    }, [isFocused]);
+
+    const getCartItems = async () => {
+        {auth.currentUser.uid ? myUserId = auth.currentUser.uid : navigation.navigate('Login')};
+        const docRef = await getDoc(doc(db, 'users', myUserId));
+        setCartCount(docRef.data().cart.length);
+    };
 
     return (
         <View style={styles.header}>
@@ -48,11 +62,10 @@ const Header = () => {
             </View>
             <TouchableOpacity style={{ paddingRight: 10 }}>
                 <Ionicons
-                    name="filter"
+                    name="options"
                     style={{
                         fontSize: 25,
                         color: "white",
-                        opacity: 0.8,
                         marginHorizontal: 5,
                     }}
                 />
@@ -60,6 +73,9 @@ const Header = () => {
             <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                 <Image source={require('../../asset/Cart.png')} />
             </TouchableOpacity>
+            <View style={styles.count}>
+                    <Text style={{ color: '#fff' }}>{cartCount ? cartCount : '0'}</Text>
+                </View>
         </View>
     );
 }
@@ -67,10 +83,22 @@ const Header = () => {
 const deviceWidth = Math.round(Dimensions.get("window").width);
 
 const styles = StyleSheet.create({
+    count: {
+        backgroundColor: 'red',
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        position: 'absolute',
+        top: 5,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     header: {
         backgroundColor: '#EA5C2B',
         padding: 10,
-        height: 50,
+        height: 60,
         //width: deviceWidth,
         flexDirection: 'row',
         justifyContent: 'center',
