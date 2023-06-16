@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 
 const Header = () => {
     const navigation = useNavigation();
+    const [searchText, setSearchText] = useState('');
+
     return (
         <View style={styles.header}>
             <Image
@@ -23,6 +25,9 @@ const Header = () => {
                 }}
             >
                 <TextInput placeholder="Search..."
+                    onChangeText={(text) => {
+                        setSearchText(text)
+                    }}
                     style={{
                         backgroundColor: 'white',
                         color: 'white',
@@ -33,16 +38,20 @@ const Header = () => {
 
                     }}
                 />
-                <Ionicons
-                    name="search"
-                    style={{
-                        fontSize: 25,
-                        color: "#7A7A7A",
-                        opacity: 0.8,
-                        paddingRight: 5,
-                        alignSelf: "center",
-                    }}
-                />
+                <TouchableOpacity style={styles.button}
+                //onPress={}
+                >
+                    <Ionicons
+                        name="search"
+                        style={{
+                            fontSize: 25,
+                            color: "#7A7A7A",
+                            opacity: 0.8,
+                            paddingRight: 5,
+                            alignSelf: "center",
+                        }}
+                    />
+                </TouchableOpacity>
             </View>
 
 
@@ -57,7 +66,7 @@ const styles = StyleSheet.create({
     header: {
         backgroundColor: '#EA5C2B',
         padding: 10,
-        height: 50,
+        height: 60,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
