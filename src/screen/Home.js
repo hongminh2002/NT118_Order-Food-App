@@ -1,63 +1,85 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity, TouchableHighlight } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { MaterialIcons } from '@expo/vector-icons';
+import { Image, StyleSheet, Text, View, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native'
+import React, { useState, useEffect } from 'react'
+//import { SafeAreaView } from 'react-native-safe-area-context'
+//import { MaterialIcons } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import categories from '../component/Home/Categories';
-import food from '../component/Home/Food';
+
 import founders from '../component/Home/Founder';
 import vouchers from '../component/Home/Vouchers';
-import BottomTab from '../component/BottomTab';
 import Slider from '../component/Home/Slider'
 import AboutUs from '../component/Home/AboutUs';
-import { Dimensions } from 'react-native';
+import { Divider } from "react-native-elements";
 import Header from '../component/Header';
+import { StatusBar } from 'expo-status-bar';
+import { auth, app, db, collection, addDoc, getDocs, updateDoc, doc, getDoc } from '../../firebase'
 
-const windowHeight = Dimensions.get('window').height;
 
 const Home = ({ navigation }) => {
 
     const [selectedCategoryIndex, setSelectedCategoryIndex] = React.useState(0);
     const [selectedFounderIndex, setSelectedFounderIndex] = React.useState(0);
     const [selectedVoucherIndex, setSelectedVoucherIndex] = React.useState(0);
+    const [menuItems, setMenuItems] = useState([]);
 
-    const ListCategories = () => {
-        return (<View style={styles.list}>
-            {categories.map((category, index) => (
-                <TouchableOpacity key={index} activeOpacity={0.8} onPress={() => setSelectedCategoryIndex(index)}>
-                    <View style={[
-                        styles.optionList,  
-                        { backgroundColor: index % 2 === 0 ? '#ffdfcf' : '#feecd1' },]}>
-                        <View style={{ padding: 5, }}>
-                            <Image style={{ width: '100%', height: 40, resizeMode: 'contain', }}
-                                source={category.image}
-                            />
-                            <Text style={styles.optionText}>{category.name}</Text>
-                        </View>
+    const featuredItems = menuItems.reduce((acc, menu) => {
+        const featured = menu.fooditems.filter(item => item.isFeatured);
+        return acc.concat(featured);
+    }, []);
+
+    const getMenuItems = async () => {
+        const querySnapshot = await getDocs(collection(db, 'MenuItems'));
+
+        const items = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            text: doc.data().text,
+            image: doc.data().image,
+            fooditems: doc.data().fooditems,
+        }));
+        setMenuItems(items);
+        console.log(items);
+
+    };
+
+    useEffect(() => {
+        getMenuItems();
+    }, []);
+
+    const ListCategories = ({ item, index }) => {
+        return (
+            <TouchableOpacity activeOpacity={0.8} onPress={() => setSelectedCategoryIndex([index])}>
+                <View style={[
+                    styles.optionList,
+                    { backgroundColor: index % 2 === 0 ? '#ffdfcf' : '#feecd1' },
+                ]}
+                >
+                    <View style={{ padding: 5, }}>
+                        <Image
+                            style={{ width: '100%', height: 40, resizeMode: 'contain', }}
+                            source={{ uri: item.image }}
+                        />
+                        <Text style={styles.optionText}>{item.text}</Text>
                     </View>
-                </TouchableOpacity>
-            ))}
-        </View>)
+                </View>
+            </TouchableOpacity>
+        )
     }
 
-    const Card = ({ food }) => {
+    const Card = (food, index) => {
         return (
-            <TouchableHighlight style={styles.cardTouch} underlayColor='white' activeOpacity={0.9} onPress={() => navigation.navigate('FoodDetail', food)}>
-
-                <View style={[styles.foodList, {marginLeft: food.id%2===0 ? 23 : 0,}]}>
-                    <View style={{ width: '100%', height: 120, backgroundColor: '#feecd1', borderRadius: 12, }}>
+            <TouchableHighlight underlayColor='white' activeOpacity={0.9} onPress={() => navigation.navigate('FoodDetail', food)}>
+                <View style={styles.foodList}>
+                    <View style={{ width: '100%', height: "100%", backgroundColor: '#feecd1', borderRadius: 12, }}>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                            <Image style={{ marginVertical: 10, width: '100%', height: 66, resizeMode: 'contain' }}
-                                source={food.image}
+                            <Image style={{ marginVertical: 3, width: '100%', height: 80, resizeMode: 'contain' }}
+                                source={{ uri: food.image }}
                             />
                         </View>
                         <View style={styles.nameIcon}>
-
-                            <Text style={styles.foodName}>{food.name}</Text>
+                            <Text style={[styles.foodName, { fontSize: 12 }]}>{food.name}</Text>
                             <View style={styles.iconName} >
-                                <Text style={{ color: 'white', fontWeight: 700, fontSize: 10, }}>{food.price}</Text>
+                                <Text style={{ color: 'white', fontWeight: 700, fontSize: 12, }}>{food.price} VNĐ</Text>
                                 <View style={styles.iconCart} >
                                     <Icon name="cart-outline" size={14} color="white" /></View>
                             </View>
@@ -112,16 +134,19 @@ const Home = ({ navigation }) => {
         </ScrollView>)
     }
     return (
-        <View>
-        <Header/>
-        <ScrollView>
-            <View style={{ flex: 1, padding: 18, backgroundColor: 'white', }}>
-                <View>
+        <View style={{ flex: 1, backgroundColor: 'white', }}>
+            <StatusBar style='dark' />
+            <Header />
+            <ScrollView showsVerticalScrollIndicator={false} style={{ paddingHorizontal: 20, }}>
+                <View style={{ paddingTop: 10 }}>
                     <Slider />
                 </View>
-                <View>
-                    <ListCategories />
-                </View>
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    numColumns={4}
+                    data={menuItems}
+                    renderItem={ListCategories}
+                />
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
                     <Text style={styles.mainTitle}>Best Seller</Text>
                     <View style={styles.moreView}>
@@ -134,10 +159,9 @@ const Home = ({ navigation }) => {
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     numColumns={2}
-                    data={food}
-                    keyExtractor={(item, index) => item.id}
-                    renderItem={({ item }) => <Card food={item} />
-                    }
+                    data={featuredItems}
+                    //keyExtractor={(item, index) => item.id}
+                    renderItem={({ item, index }) => Card(item, index)}
                 />
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
                     <Text style={styles.mainTitle}>About Us</Text>
@@ -165,7 +189,7 @@ const Home = ({ navigation }) => {
                     </View>
                 </View>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
-                    <Text style={styles.mainTitle}>Events</Text>
+                    <Text style={styles.mainTitle}>Voucher</Text>
                     <View style={styles.moreView}>
                         <Text style={styles.textMore} >More</Text>
                         <View style={styles.iconMore}>
@@ -173,16 +197,19 @@ const Home = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-                <View style ={{marginBottom: 50}}>
+                <View style={{ paddingBottom: 10 }}>
                     <ListVouchers />
                 </View>
-            </View>
-        </ScrollView >
+            </ScrollView>
+            <Divider width={1} />
         </View>
+
     )
 }
 
 export default Home;
+
+const deviceWidth = Math.round(Dimensions.get("window").width);
 
 const styles = StyleSheet.create({
 
@@ -196,12 +223,12 @@ const styles = StyleSheet.create({
     },
 
     optionList: {
-        height: 65,
-        width: 78,
+        height: 70,
+        width: 80,
         borderRadius: 12,
         marginBottom: 15,
-        justifyContent: 'space-between',
-
+        justifyContent: 'space-evenly',
+        marginRight: (deviceWidth - 80 * 4 - 40) / 3,
     },
 
 
@@ -213,21 +240,22 @@ const styles = StyleSheet.create({
     },
 
 
-    foodList: { 
-        width: '90%', height: 128,
-        marginBottom: 16,
+    foodList: {
+        width: 170,
+        height: 130,
+        marginBottom: 15,
+        marginRight: (deviceWidth - 170 * 2 - 40) / 1,
         borderWidth: 1,
         borderColor: '#DD3636',
         borderRadius: 12,
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
 
     nameIcon: {
         backgroundColor: '#EA5C2B',
-        paddingHorizontal: 10,
+        paddingHorizontal: 5,
         paddingVertical: 5,
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
     },
@@ -364,10 +392,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginRight: 10,
     },
-    cardTouch: {
-        flex: 1, 
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'center', 
-    }
 })
