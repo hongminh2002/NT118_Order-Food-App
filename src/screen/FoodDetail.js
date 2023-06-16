@@ -32,16 +32,16 @@ const FoodDetail = ({ navigation, route }) => {
       </View> */}
       <ScrollView showsVerticalScrollIndicator={true}>
         <View style={styles.backgroundDetails}>
-          <Image source={item.image} style={{ height: 220, width: 220 }} />
+          <Image source={{ uri: item.image}} style={{ height: 220, width: 220 }} />
         </View>
 
         <View style={{ marginHorizontal: 15, }}>
 
           <Text style={{ fontWeight: 700, fontSize: 20, color: '#EA5C2B', marginBottom: 8, }}>{item.name}</Text>
-          <View style={{ flexDirection: 'row', width: deviceWidth }}>
+          <View style={{ flexDirection: 'row', width: deviceWidth, justifyContent: 'space-between' }}>
             <Text style={{ fontWeight: 700, fontSize: 25, marginBottom: 8, }}>{item.price} VNĐ</Text>
 
-            <View style={{ marginRight: 25, right: -170, }}>
+            <View style={{ marginRight: 25 }}>
               <TouchableOpacity>
                 <MaterialCommunityIcons style={{ backgroundColor: '#EA5C2B', borderRadius: 200, paddingHorizontal: 16, paddingVertical: 14, }} name="cart-plus" size={26} color="white" />
               </TouchableOpacity>
