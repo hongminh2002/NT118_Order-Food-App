@@ -1,17 +1,42 @@
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFonts } from "expo-font";
-import AppLoading from 'expo-app-loading';
+import { auth, db, collection, addDoc, getDocs, updateDoc, doc, setDoc, getDoc } from '../../../firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
-const users = [
-    {
-        name: 'Phan Thanh Bách',
-        phone: '0772471714',
-        address: 'Trường Đại học Công nghệ Thông tin, Khu phố 6, Linh Trung, Thành phố Thủ Đức, Thành phố Hồ Chí Minh',
-    },
-]
+// const users = [
+//     {
+//         name: 'Phan Thanh Bách',
+//         phone: '0772471714',
+//         address: 'Trường Đại học Công nghệ Thông tin, Khu phố 6, Linh Trung, Thành phố Thủ Đức, Thành phố Hồ Chí Minh',
+//     },
+// ]
 
-const UserInformation = () => {
+const UserInformation = ({ navigation }) => {
+    const [selectedAddress, setSelectedAddress] = useState('Chọn một địa chỉ');
+    const [selectedReceiver, setSelectedReceiver] = useState('');
+    const [selectedMobile, setSelectedMobile] = useState('');
+    const isFocused = useIsFocused();
+    
+    useEffect(() => {
+        getAddress();
+    },[isFocused])
+
+    const getAddress = async () => {
+        myUserId = auth.currentUser.uid;
+        const docRef = await getDoc(doc(db, 'users', `${myUserId}`));
+        const addressId = await AsyncStorage.getItem('ADDRESS');
+        let tempDart = [];
+        tempDart = docRef.data().address;
+        tempDart.map(item => {
+            if (item.addressId === addressId) {
+                setSelectedAddress(item.street + ", " + item.city);
+                setSelectedReceiver(item.receiver);
+                setSelectedMobile(item.mobile);
+            }
+        })
+    }
 
     const [fontsLoaded] = useFonts({
         "Roboto-Bold": require("../../asset/fonts/Roboto-Bold.ttf"),
@@ -20,22 +45,22 @@ const UserInformation = () => {
     });
 
     if (!fontsLoaded) {
-        return <AppLoading />;
+        return null;
     }
 
     return (
         <View style={styles.infobox}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 5, }}>
-                <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 14, }}>Địa chỉ</Text>
-                <TouchableOpacity style={styles.button}>
+                <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 15, }}>Địa chỉ</Text>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Address')}>
                     <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 12, color: '#EA5C2B' }}>Thay đổi</Text>
                 </TouchableOpacity>
             </View>
-            <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 13, color: '#7A7A7A' }}>{users[0].address}</Text>
-            <View style={{ flexDirection: 'row', paddingTop: 3, }}>
-                <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 13, }}>{users[0].name}</Text>
+            <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, color: '#7A7A7A' }}>{selectedAddress}</Text>
+            <View style={{ flexDirection: 'row', paddingTop: 5, }}>
+                <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>{selectedReceiver}</Text>
                 <View style={styles.verticalline}></View>
-                <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 13, }}>{users[0].phone}</Text>
+                <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>{selectedMobile}</Text>
             </View>
         </View>
     )
