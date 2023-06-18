@@ -1,8 +1,8 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+//import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { TouchableOpacity, View } from 'react-native';
+//import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import Home from './src/screen/Home';
@@ -12,8 +12,7 @@ import ChooseSuccessfully from "./src/screen/VoucherScreen/ChooseSuccessfully";
 import VoucherDescription from "./src/screen/VoucherScreen/VoucherDescription";
 import Sort from "./src/screen/Sort";
 import Account from './src/screen/Account';
-import Cart from './src/screen/CartScreen/Cart';
-import OrderConfirm from './src/screen/OrderConfirm';
+
 import ReviewDescription from './src/screen/Rating/ReviewDescription';
 import ThongTin from './src/screen/ThongTin';
 import DoiMatKhau from './src/screen/DoiMatKhau';
@@ -25,7 +24,13 @@ import SortMoney from "./src/component/Sort/SortMoney";
 import DetailReview from "./src/component/FoodDetail/DetailReview";
 import OrderTracking from './src/component/OrderTracking/TopTab';
 
+import Cart from './src/screen/CartScreen/Cart';
+import OrderConfirm from './src/screen/Checkout/OrderConfirm';
+import AddAddress from './src/screen/Checkout/AddAddress';
+import Address from './src/screen/Checkout/Address';
+
 import { FontAwesome5 } from '@expo/vector-icons';
+
 
 const Stack = createStackNavigator();
 
@@ -101,13 +106,18 @@ const HomeStack = () => {
 
 const MenuStack = () => {
     console.log(Stack);
-    const navigation = useNavigation();
     return (
         <NavigationContainer independent={true}>
-            <Stack.Navigator initialRouteName='Thực đơn'
+            <Stack.Navigator initialRouteName='Menu'
             //screenOptions={{ headerShown: false, }}
             >
-                <Stack.Screen name="Thực đơn" component={Menu} options={{ headerShown: false, }} />
+                <Stack.Screen name="Menu" component={Menu}
+                    options={{
+                        headerShown: false,
+                        title: 'Thực đơn',
+                    }}
+
+                />
                 <Stack.Screen name="FoodDetail" component={FoodDetail}
                     options={{
                         title: 'Chi tiết sản phẩm',
@@ -115,27 +125,26 @@ const MenuStack = () => {
                             height: 60,
                         },
                         headerTitleAlign: 'center',
-                        headerTitleStyle: { fontSize: 18, paddingBottom: 10, },
-                        headerLeftContainerStyle: { paddingBottom: 10, },
+                        headerTitleStyle: { fontSize: 18, },
+                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
 
                 />
                 <Stack.Screen name="Lọc" component={Sort} />
                 <Stack.Screen name="Giá tiền" component={SortMoney} />
                 <Stack.Screen name="Theo dõi đơn hàng" component={OrderTracking} />
-                <Stack.Screen
-                    name="ReviewStack"
-                    component={ReviewStack}
+                <Stack.Screen name="ReviewStack" component={ReviewStack}
                     options={{
                         title: 'Đánh giá',
                         headerStyle: {
                             height: 60,
                         },
                         headerTitleAlign: 'left',
-                        headerTitleStyle: { fontSize: 18, paddingBottom: 10, },
-                        headerLeftContainerStyle: { paddingBottom: 10, },
+                        headerTitleStyle: { fontSize: 18, },
+                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
+                <Stack.Screen name="Sort" component={Sort} />
                 <Stack.Screen name="Cart" component={Cart}
                     options={{
                         title: 'Giỏ hàng',
@@ -143,8 +152,8 @@ const MenuStack = () => {
                             height: 60,
                         },
                         headerTitleAlign: 'center',
-                        headerTitleStyle: { fontSize: 18, paddingBottom: 10, },
-                        headerLeftContainerStyle: { paddingBottom: 10, },
+                        headerTitleStyle: { fontSize: 18, },
+                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
                 <Stack.Screen name="OrderConfirm" component={OrderConfirm}
@@ -154,8 +163,30 @@ const MenuStack = () => {
                             height: 60,
                         },
                         headerTitleAlign: 'center',
-                        headerTitleStyle: { fontSize: 18, paddingBottom: 10, },
-                        headerLeftContainerStyle: { paddingBottom: 10, },
+                        headerTitleStyle: { fontSize: 18, },
+                        //headerLeftContainerStyle: { paddingBottom: 10, },
+                    }}
+                />
+                <Stack.Screen name="Address" component={Address} 
+                    options={{
+                        title: 'Thay đổi địa chỉ',
+                        headerStyle: {
+                            height: 60,
+                        },
+                        headerTitleAlign: 'center',
+                        headerTitleStyle: { fontSize: 18, },
+                        //headerLeftContainerStyle: { paddingBottom: 10, },
+                    }}
+                />
+                <Stack.Screen name="AddAddress" component={AddAddress} 
+                    options={{
+                        title: 'Thêm địa chỉ mới',
+                        headerStyle: {
+                            height: 60,
+                        },
+                        headerTitleAlign: 'center',
+                        headerTitleStyle: { fontSize: 18, },
+                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
                 <Stack.Screen name="OrderTracking" component={OrderTracking}
@@ -165,8 +196,8 @@ const MenuStack = () => {
                             height: 60,
                         },
                         headerTitleAlign: 'center',
-                        headerTitleStyle: { fontSize: 18, paddingBottom: 10, },
-                        headerLeftContainerStyle: { paddingBottom: 10, },
+                        headerTitleStyle: { fontSize: 18, },
+                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
             </Stack.Navigator>
@@ -205,6 +236,7 @@ const VoucherStack = () => {
                         headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
+                <Stack.Screen name="AddAddress" component={AddAddress} />
                 <Stack.Screen name="OrderTracking" component={OrderTracking}
                     options={{
                         title: 'Theo dõi đơn hàng',
@@ -249,4 +281,4 @@ const ReviewStack = () => {
     );
 }
 
-export { HomeStack, MenuStack, VoucherStack, ProfileStack, ReviewStack };
+export { HomeStack, MenuStack, VoucherStack, ProfileStack, ReviewStack, };
