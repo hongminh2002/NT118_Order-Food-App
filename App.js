@@ -13,15 +13,15 @@ import BottomTab from './src/component/BottomTab';
 import DangNhap from './src/screen/DangNhap';
 import DangKy from './src/screen/DangKy';
 import QuenMatKhau from './src/screen/QuenMatKhau';
-import Menu from './src/screen/Menu';
-import OrderConfirm from './src/screen/OrderConfirm';
-import OrderHistory from './src/screen/OrderHistory';
-import OrderTracking from './src/screen/OrderTracking';
-import OrderManagement from './src/screen/OrderManagement';
-import Home from './src/screen/Home';
-import FoodDetail from './src/screen/FoodDetail';
-import ReviewDescription from './src/screen/Rating/ReviewDescription';
-import Account from './src/screen/Account';
+// import Menu from './src/screen/Menu';
+// import OrderConfirm from './src/screen/Checkout/OrderConfirm';
+// import OrderHistory from './src/screen/OrderHistory';
+// import OrderTracking from './src/screen/OrderTracking';
+// import OrderManagement from './src/screen/OrderManagement';
+// import Home from './src/screen/Home';
+// import FoodDetail from './src/screen/FoodDetail';
+// import ReviewDescription from './src/screen/Rating/ReviewDescription';
+// import Account from './src/screen/Account';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
