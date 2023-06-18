@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { useState } from 'react';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Text, TextInput, SafeAreaView, StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
 import Constants from "expo-constants";
@@ -15,7 +15,7 @@ const DangKy = ({ navigation }) => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const register = () => {
+  const register = async () => {
     if (name === "" || phone === "" || email === "" || password === "") {
       Alert.alert('Bạn chưa điền đủ thông tin', 'Vui lòng nhập lại đầy đủ thông tin', [
         {
@@ -33,10 +33,13 @@ const DangKy = ({ navigation }) => {
         const myUserUid = auth.currentUser.uid;
 
         setDoc(doc(db, "users", `${myUserUid}`), {
+          userId: myUserUid,
           email: user,
           name: name,
           phone: phone,
-        })
+          cart: [],
+          address: [],
+        });
       })
       .catch((error) => {
         if (error.code == "auth/email-already-in-use") {
