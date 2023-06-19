@@ -15,9 +15,6 @@ export default function VoucherDes(){
                 borderBottomWidth:1.5
             }}>
                 <TouchableOpacity onPress = {() => navigation.goBack()}>
-                <Image 
-                    source={require('../../asset/Exit.png')} 
-                    style={{marginLeft:15}} />
                 </TouchableOpacity>
                 <Text style={{
                     fontSize:25, 
@@ -25,17 +22,6 @@ export default function VoucherDes(){
                     marginLeft:30}}>
                     Giảm 10% đơn từ 200K
                 </Text>
-            </View>
-            <View style={{
-                flexDirection:'row',
-                alignItems:'center',
-                height:65,
-                backgroundColor:'white',
-                borderBottomColor:'#989292',
-                borderBottomWidth:1.5,
-                justifyContent:'center'
-            }}>
-                <Text style={{fontSize:22}}>Giảm 10%, thêm ưu đãi bên dưới</Text>
             </View>
             <View style={{
                 flexDirection:'row',
