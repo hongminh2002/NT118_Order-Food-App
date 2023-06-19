@@ -9,7 +9,6 @@ export default function Voucher() {
     <SafeAreaView style={{flex:1}}>
         <Header />
         <VoucherItem />
-        <BottomTab />
     </SafeAreaView>
   );
 }
