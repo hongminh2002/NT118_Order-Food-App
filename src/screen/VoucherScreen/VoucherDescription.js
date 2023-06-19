@@ -7,7 +7,6 @@ import ApDungBigButton from "../../component/VoucherDetail/ApDungBigButton";
 export default function VoucherDescription(){
     return(
         <SafeAreaView style={{flex:1}}>
-            <Header />
             <ScrollView>
                 <VoucherDes />
             </ScrollView>
