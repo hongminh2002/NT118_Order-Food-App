@@ -37,6 +37,7 @@ const DangKy = ({ navigation }) => {
           email: user,
           name: name,
           phone: phone,
+          birthday: '01/01/2000',
           cart: [],
           address: [],
         });
