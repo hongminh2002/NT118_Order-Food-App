@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Component } from 'react';
+import React, { useEffect, useState, Component, useContext } from 'react';
 import { Text, TextInput, SafeAreaView, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
 import Constants from "expo-constants";
 import { AntDesign } from '@expo/vector-icons';
@@ -6,11 +6,41 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { auth, setDoc, getDoc, db, doc, } from "../../firebase";
 import { signOut } from "firebase/auth";
+import { collection, getDoc } from "firebase/firestore";
+
+import { auth, setDoc, db, doc } from "../../firebase";
+
 
 const Account = () => {
   const navigation = useNavigation();
+  const user = auth.currentUser;
+  const [userName, setUserName] = useState("");
+
+
+  const getUser = async () => {
+    if (user) { 
+      const myUserUid = auth.currentUser.uid;
+      const docRef = doc(db, "users", `${myUserUid}`);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        const userData = docSnap.data();
+        const name = userData.name;
+        setUserName(name);
+
+       } else {
+        // docSnap.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    } else {
+      alert("Không có tài khoản!");
+    }}
+
+    useEffect(() => {
+      getUser();
+    }, []); 
 
   const handleSignOut = () => {
     signOut(auth)
@@ -31,27 +61,18 @@ const Account = () => {
           }} />
         </View>
         <View style={{ flex: 4, justifyContent: "space-between" }}>
-          <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>Nguyễn Văn A</Text>
+          <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>{userName}</Text>
+
           <View style={{ flexDirection: 'row' }}>
-            <MaterialIcons name="edit" size={15} color="white" ></MaterialIcons>
+            <MaterialIcons name="edit" size={15} color="white" ></MaterialIcons> 
             <TouchableOpacity onPress={() => navigation.navigate('ThongTin')}>
               <Text style={{ color: "#fff" }}>Chỉnh sửa thông tin cá nhân</Text>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ flex: 1 }}>
-          <AntDesign name="close" size={24} color="white" />
-        </View>
       </View>
       <View style={{ marginTop: 21, height: 700 }}>
-        <View style={style.content}>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <Entypo name="location-pin" size={15} color="#EA5C2B" style={style.icon1} />
-            <Text style={style.text}>Địa chỉ</Text>
-            <AntDesign name="right" size={12} color="black" style={style.icon2} />
-          </View>
-          <View style={{ width: '100%', height: 0, borderWidth: 0.5, borderColor: "#B9B9B9" }}></View>
-        </View>
+        
         <View style={style.content}>
           <TouchableOpacity style={{ flexDirection: 'row', flex: 1 }} onPress={() => navigation.navigate('DoiMatKhau')} >
             <Entypo name="lock" size={15} color="#EA5C2B" style={style.icon1} />
@@ -68,14 +89,7 @@ const Account = () => {
           </View>
           <View style={{ width: '100%', height: 0, borderWidth: 0.5, borderColor: "#B9B9B9" }}></View>
         </View>
-        <View style={style.content}>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <FontAwesome name="ticket" size={15} color="#EA5C2B" style={style.icon1} />
-            <Text style={style.text}>Ưu đãi</Text>
-            <AntDesign name="right" size={12} color="black" style={style.icon2} />
-          </View>
-          <View style={{ width: '100%', height: 0, borderWidth: 0.5, borderColor: "#B9B9B9" }}></View>
-        </View>
+        
         <View style={style.content}>
           <View style={{ flexDirection: 'row', flex: 1 }}>
             <MaterialIcons name="notifications" size={15} color="#EA5C2B" style={style.icon1} />
