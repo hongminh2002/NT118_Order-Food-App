@@ -61,8 +61,7 @@ const Account = () => {
           }} />
         </View>
         <View style={{ flex: 4, justifyContent: "space-between" }}>
-          <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>{userName}</Text>
-
+          <Text style={{ color: "#fff", fontSize: 20, fontWeight: "bold", marginTop: 20, }}>{userName}</Text>
           <View style={{ flexDirection: 'row' }}>
             <MaterialIcons name="edit" size={15} color="white" ></MaterialIcons> 
             <TouchableOpacity onPress={() => navigation.navigate('ThongTin')}>
