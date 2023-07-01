@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 //import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 //import { TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 
 import Home from './src/screen/Home';
 import Menu from './src/screen/Menu';
@@ -22,14 +22,15 @@ import Voucher from "./src/screen/VoucherScreen/Voucher";
 import SortReview from "./src/component/Sort/SortReview";
 import SortMoney from "./src/component/Sort/SortMoney";
 import DetailReview from "./src/component/FoodDetail/DetailReview";
-import OrderTracking from './src/component/OrderTracking/TopTab';
+import OrderTracking from './src/screens/OrderTracking';
 
-import Cart from './src/screen/CartScreen/Cart';
-import OrderConfirm from './src/screen/Checkout/OrderConfirm';
-import AddAddress from './src/screen/Checkout/AddAddress';
-import Address from './src/screen/Checkout/Address';
+import Cart from './src/screens/CartScreen/Cart';
+import OrderConfirm from './src/screens/Checkout/OrderConfirm';
+import AddAddress from './src/screens/Checkout/AddAddress';
+import Address from './src/screens/Checkout/Address';
+import OrderStatus from './src/screens/Checkout/OrderStatus';
 
-import { FontAwesome5 } from '@expo/vector-icons';
+//import { FontAwesome5 } from '@expo/vector-icons';
 
 
 const Stack = createStackNavigator();
@@ -108,9 +109,7 @@ const MenuStack = () => {
     console.log(Stack);
     return (
         <NavigationContainer independent={true}>
-            <Stack.Navigator initialRouteName='Menu'
-            //screenOptions={{ headerShown: false, }}
-            >
+            <Stack.Navigator initialRouteName='Menu'>
                 <Stack.Screen name="Menu" component={Menu}
                     options={{
                         headerShown: false,
@@ -126,7 +125,6 @@ const MenuStack = () => {
                         },
                         headerTitleAlign: 'center',
                         headerTitleStyle: { fontSize: 18, },
-                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
 
                 />
@@ -141,7 +139,6 @@ const MenuStack = () => {
                         },
                         headerTitleAlign: 'left',
                         headerTitleStyle: { fontSize: 18, },
-                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
                 <Stack.Screen name="Sort" component={Sort} />
@@ -153,7 +150,6 @@ const MenuStack = () => {
                         },
                         headerTitleAlign: 'center',
                         headerTitleStyle: { fontSize: 18, },
-                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
                 <Stack.Screen name="OrderConfirm" component={OrderConfirm}
@@ -164,7 +160,6 @@ const MenuStack = () => {
                         },
                         headerTitleAlign: 'center',
                         headerTitleStyle: { fontSize: 18, },
-                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
                 <Stack.Screen name="Address" component={Address} 
@@ -175,7 +170,6 @@ const MenuStack = () => {
                         },
                         headerTitleAlign: 'center',
                         headerTitleStyle: { fontSize: 18, },
-                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
                 <Stack.Screen name="AddAddress" component={AddAddress} 
@@ -186,20 +180,14 @@ const MenuStack = () => {
                         },
                         headerTitleAlign: 'center',
                         headerTitleStyle: { fontSize: 18, },
-                        //headerLeftContainerStyle: { paddingBottom: 10, },
                     }}
                 />
-                <Stack.Screen name="OrderTracking" component={OrderTracking}
+                <Stack.Screen name="OrderStatus" component={OrderStatus}
                     options={{
-                        title: 'Theo dõi đơn hàng',
-                        headerStyle: {
-                            height: 60,
-                        },
-                        headerTitleAlign: 'center',
-                        headerTitleStyle: { fontSize: 18, },
-                        //headerLeftContainerStyle: { paddingBottom: 10, },
+                        headerShown: false,
                     }}
                 />
+                <Stack.Screen name="Trang chủ" component={Home} options={{ headerShown: false, }} />
             </Stack.Navigator>
         </NavigationContainer>
     )
@@ -265,6 +253,17 @@ const ProfileStack = () => {
                 <Stack.Screen name='ThongTin' component={ThongTin} />
                 <Stack.Screen name='DoiMatKhau' component={DoiMatKhau} />
                 <Stack.Screen name='XacThuc' component={XacThuc} />
+                <Stack.Screen name="OrderTracking" component={OrderTracking}
+                    options={{
+                        headerShown: true,
+                        title: 'Theo dõi đơn hàng',
+                        headerStyle: {
+                            height: 60,
+                        },
+                        headerTitleAlign: 'center',
+                        headerTitleStyle: { fontSize: 18, },
+                    }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );
