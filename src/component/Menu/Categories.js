@@ -1,13 +1,9 @@
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Dimensions, TextInput, Image, Modal } from 'react-native'
-//import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Dimensions, TextInput, Image, Modal } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
-//import { MenuItems } from './MenuData';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { auth, app, db, getFirestore, collection, collectionGroup, addDoc, getDocs, updateDoc, doc, getDoc, query, where } from '../../../firebase'
-//import { onAuthStateChanged } from 'firebase/auth';
+import { auth, db, collection, getDocs, updateDoc, doc, getDoc, } from '../../../firebase'
 
 let myUserId = '';
 
@@ -44,7 +40,7 @@ const Categories = () => {
         getCartItems();
     }, [isFocused]);
     const getCartItems = async () => {
-        {auth.currentUser.uid ? myUserId = auth.currentUser.uid : navigation.navigate('Login')};
+        { auth.currentUser.uid ? myUserId = auth.currentUser.uid : navigation.navigate('Login') };
         const docRef = await getDoc(doc(db, 'users', myUserId));
         setCartCount(docRef.data().cart.length);
     };
@@ -124,7 +120,7 @@ const Categories = () => {
                             {item.name}
                         </Text>
                         <Text style={{ fontFamily: "Roboto-Medium", fontSize: 12 }}>
-                            {item.price} VNĐ
+                            {VND.format(item.price)}
                         </Text>
                     </View>
                     <TouchableOpacity
@@ -148,8 +144,13 @@ const Categories = () => {
     });
 
     if (!fontsLoaded) {
-        return <AppLoading />;
+        return null;
     }
+
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
 
     return (
         <View style={{ flex: 1 }}>
