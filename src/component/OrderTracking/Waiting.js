@@ -1,18 +1,19 @@
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useFonts } from "expo-font";
-import AppLoading from 'expo-app-loading';
+import { auth, app, db, collection, addDoc, getDocs, updateDoc, doc, getDoc } from '../../../firebase'
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 const orders = [
     {
-        image: require("../../asset/FoodImage/cheese-burger-deluxe.png"),
+        image: require("../../asset/FoodImages/cheese-burger-deluxe.png"),
         foodname: 'Burger bò phô-mai đặc biệt x2',
         total: '110,000',
         time: '15:45',
         date: '31/3/2023',
     },
     {
-        image: require("../../asset/FoodImage/mcspicy-deluxe.png"),
+        image: require("../../asset/FoodImages/mcspicy-deluxe.png"),
         foodname: 'Burger phi lê gà cay đặc biệt',
         total: '101,000',
         time: '14:00',
@@ -20,7 +21,22 @@ const orders = [
     },
 ]
 
+let myUserId = '';
+
 const Waiting = () => {
+    const [orderList, setOrderList] = useState([]);
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        getOrders();
+    }, [isFocused])
+
+    const getOrders = async () => {
+        myUserId = auth.currentUser.uid;
+        const docRef = await getDoc(doc(db, 'users', myUserId));
+        console.log(JSON.stringify(docRef.data().orders));
+        setOrderList(docRef.data().orders);
+    }
 
     const [fontsLoaded] = useFonts({
         "Roboto-Bold": require("../../asset/fonts/Roboto-Bold.ttf"),
@@ -29,12 +45,41 @@ const Waiting = () => {
     });
 
     if (!fontsLoaded) {
-        return <AppLoading />;
+        return null;
     }
 
     return (
-        <View >
-            {orders.map((order, index) => (
+        <View>
+            <FlatList
+                data={orderList}
+                keyExtractor={({ item, index }) => index}
+                renderItem={({ item, index }) => {
+                    return (
+                        <View style={styles.infobox}>
+                            <FlatList
+                                data={item.items}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View style={{ flexDirection: 'row', marginLeft: 15, marginRight: 10, alignItems: 'center', justifyContent: 'space-between', }}>
+                                            <Image source={{ uri: item.image }} style={styles.img} />
+                                            <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: 200, }}>
+                                                <Text style={{ fontFamily: "Roboto-Medium", fontSize: 14, }}>{item.name}</Text>
+                                            </View>
+                                            <Text style={{ fontFamily: "Roboto-Regular", fontSize: 13, }}>Số lượng: {item.qty}</Text>
+                                        </View>
+                                    )
+                                }}
+                            />
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={{ fontFamily: "Roboto-Regular", fontSize: 13, }}>order.time - order.date</Text>
+                                <Text style={{ fontFamily: "Roboto-Regular", fontSize: 13, }}>{item.orderTotal}</Text>
+                            </View>
+                            <View style={styles.horizontalline}></View>
+                        </View>
+                    )
+                }}
+            />
+            {/* {orders.map((order, index) => (
                 <View key={index} style={styles.infobox}>
                     <View style={{ flexDirection: 'row', marginLeft: 15, marginRight: 10, alignItems: 'center', justifyContent: 'space-between', }}>
                         <Image source={order.image} style={styles.img} />
@@ -46,7 +91,7 @@ const Waiting = () => {
                     </View>
                     <View style={styles.horizontalline}></View>
                 </View>
-            ))}
+            ))} */}
         </View>
     )
 }
