@@ -1,7 +1,6 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity, TouchableHighlight, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
-//import { SafeAreaView } from 'react-native-safe-area-context'
-//import { MaterialIcons } from '@expo/vector-icons';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
@@ -79,7 +78,7 @@ const Home = ({ navigation }) => {
                         <View style={styles.nameIcon}>
                             <Text style={[styles.foodName, { fontSize: 12 }]}>{food.name}</Text>
                             <View style={styles.iconName} >
-                                <Text style={{ color: 'white', fontWeight: 700, fontSize: 12, }}>{food.price} VNĐ</Text>
+                                <Text style={{ color: 'white', fontWeight: 700, fontSize: 12, }}>{VND.format(food.price)}</Text>
                                 <View style={styles.iconCart} >
                                     <Icon name="cart-outline" size={14} color="white" /></View>
                             </View>
@@ -133,6 +132,12 @@ const Home = ({ navigation }) => {
             ))}
         </ScrollView>)
     }
+
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
+
     return (
         <View style={{ flex: 1, backgroundColor: 'white', }}>
             <StatusBar style='dark' />
