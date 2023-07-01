@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import { useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Text, TextInput, SafeAreaView, StyleSheet, TouchableOpacity, View, Image, Alert } from 'react-native';
 import Constants from "expo-constants";
-import { AntDesign } from '@expo/vector-icons';
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { AntDesign, SimpleLineIcons } from '@expo/vector-icons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, setDoc, db, doc } from "../../firebase";
 
 const DangKy = ({ navigation }) => {
-
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(true);
+
   const register = async () => {
     if (name === "" || phone === "" || email === "" || password === "") {
       Alert.alert('Bạn chưa điền đủ thông tin', 'Vui lòng nhập lại đầy đủ thông tin', [
@@ -37,7 +39,7 @@ const DangKy = ({ navigation }) => {
           email: user,
           name: name,
           phone: phone,
-          birthday: '01/01/2000',
+          birthday: '',
           cart: [],
           address: [],
           orders: [],
@@ -45,82 +47,97 @@ const DangKy = ({ navigation }) => {
       })
       .catch((error) => {
         if (error.code == "auth/email-already-in-use") {
-            alert("The email address is already in use");
+          alert("The email address is already in use");
         } else if (error.code == "auth/invalid-email") {
-            alert("The email address is not valid.");
+          alert("The email address is not valid.");
         } else if (error.code == "auth/operation-not-allowed") {
-            alert("Operation not allowed.");
+          alert("Operation not allowed.");
         } else if (error.code == "auth/weak-password") {
-            alert("The password is too weak.");
+          alert("The password is too weak.");
         }
       });
   }
   return (
-    <SafeAreaView style={style.container}>
-      <Image source={require('../asset/Nền1.png')} style={style.background1} />
-      <Image source={require('../asset/Nền2.png')} style={style.background2} />
-      <View style={style.page}>
-        <View>
-          <Text style={style.pageName}>
-            Đăng ký
-          </Text>
+    <View style={styles.container}>
+      <Image source={require('../asset/Nền1.png')} style={styles.background1} />
+      <Image source={require('../asset/Nền2.png')} style={styles.background2} />
+      <View style={styles.page}>
+        <View style={styles.logo}>
+          <Image source={require('../asset/Logo1.png')} style={{ width: '80%', height: '50%' }} />
         </View>
         <View style={{ flex: 1, justifyContent: 'space-between' }}>
-          <View style={style.content}>
-            <View style={style.input}>
-              <View style={style.icon}>
+          <View style={styles.content}>
+            <View style={styles.input}>
+              <View style={styles.icon}>
                 <AntDesign name="user" size={14} color="#B9B9B9" />
               </View>
-              <View style={style.type}>
+              <View style={styles.type}>
                 <TextInput value={name}
-                  onChangeText={(text) => setName(text)} style={style.type} placeholder="Họ tên người dùng" />
+                  onChangeText={(text) => setName(text)} style={styles.type} placeholder="Họ tên người dùng" />
               </View>
             </View>
-            <View style={style.input}>
-              <View style={style.icon}>
+            <View style={styles.input}>
+              <View style={styles.icon}>
                 <SimpleLineIcons name="phone" size={14} color="#B9B9B9" />
               </View>
-              <View style={style.type}>
+              <View style={styles.type}>
                 <TextInput value={phone}
-                  onChangeText={(text) => setPhone(text)} style={style.type} placeholder="Số điện thoại" />
+                  onChangeText={(text) => setPhone(text)} style={styles.type} placeholder="Số điện thoại" />
               </View>
             </View>
-            <View style={style.input}>
-              <View style={style.icon}>
+            <View style={styles.input}>
+              <View style={styles.icon}>
                 <AntDesign name="user" size={14} color="#B9B9B9" />
               </View>
-              <View style={style.type}>
+              <View style={styles.type}>
                 <TextInput
                   value={email}
                   onChangeText={(text) => setEmail(text)}
-                  style={style.type} placeholder="Tên đăng nhập" />
+                  style={styles.type} placeholder="Email" />
               </View>
             </View>
-            <View style={style.input}>
-              <View style={style.iconPass}>
+            <View style={styles.input}>
+              <View style={styles.iconPass}>
                 <AntDesign name="lock" size={16} color="#B9B9B9" />
               </View>
-              <View style={style.typePass} >
+              <View style={styles.typePass} >
                 <TextInput value={password}
                   onChangeText={(text) => setPassword(text)}
-                  secureTextEntry={true} style={style.typePass} placeholder='Mật khẩu' />
+                  secureTextEntry={passwordVisible} style={styles.typePass} placeholder='Mật khẩu' />
               </View>
-              <View style={style.eye}>
-                <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={style.eye} />
-              </View>
+              <TouchableOpacity style={styles.eye} onPress={() => setPasswordVisible(!passwordVisible)}>
+                {!passwordVisible ? (
+                  <Ionicons
+                    name="eye-outline"
+                    style={{
+                      fontSize: 15,
+                      color: "#7A7A7A",
+                      opacity: 0.8,
+                    }}
+                  />
+                ) : (
+                  <Ionicons
+                    name="eye-off-outline"
+                    style={{
+                      fontSize: 15,
+                      color: "#7A7A7A",
+                      opacity: 0.8,
+                    }}
+                  />)}
+              </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={register}>
-              <Text style={style.login}>Đăng ký</Text>
+              <Text style={styles.signUp}>Đăng ký</Text>
             </TouchableOpacity>
           </View>
           <View>
             <TouchableOpacity onPress={() => navigation.navigate('DangNhap')}>
-              <Text style={style.signUp}>Đã có tài khoản? Đăng nhập</Text>
+              <Text style={styles.login}>Đã có tài khoản? Đăng nhập</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -129,7 +146,7 @@ const TEXT = {
   fontSize: 12,
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     textAlign: "center",
@@ -139,9 +156,10 @@ const style = StyleSheet.create({
   background1: {
     position: 'absolute',
     width: '100%',
-    height: 450,
+    height: '90%',
   },
   background2: {
+    flex: 1,
     position: 'absolute',
     top: 100,
     width: '80%',
@@ -155,12 +173,12 @@ const style = StyleSheet.create({
     height: 450,
     alignSelf: 'center',
   },
-  pageName: {
-    ...TEXT,
-    marginTop: 50,
-    color: "#EA5C2B",
-    fontSize: 18,
-    fontWeight: "bold",
+  logo: {
+    width: '60%',
+    height: '12%',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 20,
   },
   content: {
     width: '80%',
@@ -172,17 +190,17 @@ const style = StyleSheet.create({
     height: 39,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#B9B9B9',
+    borderColor: '#7A7A7A',
   },
   icon: {
-    flex: 1,
-    top: 10,
-    left: 15,
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   type: {
-    fontSize: 12,
+    fontSize: 13,
     flex: 4,
-    color: '#B9B9B9',
+    color: '#7A7A7A',
   },
   iconPass: {
     flex: 1,
@@ -190,27 +208,29 @@ const style = StyleSheet.create({
     left: 15,
   },
   typePass: {
-    fontSize: 12,
+    fontSize: 13,
     flex: 3,
-    color: '#B9B9B9',
+    color: '#7A7A7A',
   },
   eye: {
-    flex: 1,
-    top: 7,
-    left: 5
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  login: {
+  signUp: {
     ...TEXT,
     height: 35,
+    fontSize: 13,
     borderRadius: 12,
     marginTop: 20,
     color: '#fff',
     backgroundColor: "#EA5C2B",
     paddingTop: 7,
   },
-  signUp: {
+  login: {
     ...TEXT,
     height: 35,
+    fontSize: 13,
     color: '#B9B9B9',
     paddingTop: 7,
   }

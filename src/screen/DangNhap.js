@@ -1,8 +1,9 @@
 import React, { useState, useEffect, Component } from 'react';
 import { Text, TextInput, SafeAreaView, StyleSheet, TouchableOpacity, View, Image, ImageBackground } from 'react-native';
 import Constants from "expo-constants";
-import { AntDesign } from '@expo/vector-icons';
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { AntDesign, SimpleLineIcons } from '@expo/vector-icons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, setDoc, db, doc, } from "../../firebase";
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 const DangNhap = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(true);
 
     const navigation = useNavigation();
 
@@ -26,64 +28,79 @@ const DangNhap = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then(userCredentials => {
                 const user = userCredentials.user;
-                console.log("Logged in with: ", user.email);
+                console.log("Logged in with: ", user.uid);
             })
             .catch(error => alert(error.message));
     }
 
     return (
         <View style={styles.container}>
-                <Image source={require('../asset/Nền1.png')} style={styles.background1} />
-                <Image source={require('../asset/Nền2.png')} style={styles.background2} />
-                <View style={styles.page}>
-                    <View>
-                        <Text style={styles.pageName}>
-                            Đăng nhập
-                        </Text>
+            <Image source={require('../asset/Nền1.png')} style={styles.background1} />
+            <Image source={require('../asset/Nền2.png')} style={styles.background2} />
+            <View style={styles.page}>
+                <View style={styles.logo}>
+                    <Image source={require('../asset/Logo1.png')} style={{width: '80%', height: '50%'}} />
+                </View>
+                <View style={{ flex: 1, justifyContent: 'space-between' }}>
+                    <View style={styles.content}>
+                        <View style={styles.input}>
+                            <View style={styles.icon}>
+                                <AntDesign name="user" size={14} color="#B9B9B9" />
+                            </View>
+                            <View style={styles.typeAccount}>
+                                <TextInput value={email}
+                                    onChangeText={(text) => setEmail(text)}
+                                    style={styles.typeAccount}
+                                    placeholder="Email" />
+                            </View>
+                        </View>
+                        <View style={styles.input}>
+                            <View style={styles.icon}>
+                                <AntDesign name="lock" size={16} color="#B9B9B9" />
+                            </View>
+                            <View style={styles.typePass} >
+                                <TextInput
+                                    value={password}
+                                    onChangeText={(text) => setPassword(text)}
+                                    secureTextEntry={passwordVisible}
+                                    style={styles.typePass}
+                                    placeholder='Password' />
+                            </View>
+                            <TouchableOpacity style={styles.eye} onPress={() => setPasswordVisible(!passwordVisible)}>
+                                {!passwordVisible ? (
+                                    <Ionicons
+                                        name="eye-outline"
+                                        style={{
+                                            fontSize: 15,
+                                            color: "#7A7A7A",
+                                            opacity: 0.8,
+                                        }}
+                                    />
+                                ) : (
+                                    <Ionicons
+                                        name="eye-off-outline"
+                                        style={{
+                                            fontSize: 15,
+                                            color: "#7A7A7A",
+                                            opacity: 0.8,
+                                        }}
+                                    />)}
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity onPress={handleLogIn}>
+                            <Text style={styles.login}>Đăng Nhập</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('QuenMatKhau')}>
+                            <Text style={styles.forgetPassword}>Quên Mật Khẩu?</Text>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 1, justifyContent: 'space-between' }}>
-                        <View style={styles.content}>
-                            <View style={styles.input}>
-                                <View style={styles.iconAccount}>
-                                    <AntDesign name="user" size={14} color="#B9B9B9" />
-                                </View>
-                                <View style={styles.typeAccount}>
-                                    <TextInput value={email}
-                                        onChangeText={(text) => setEmail(text)}
-                                        style={styles.typeAccount}
-                                        placeholder="Email" />
-                                </View>
-                            </View>
-                            <View style={styles.input}>
-                                <View style={styles.iconPass}>
-                                    <AntDesign name="lock" size={16} color="#B9B9B9" />
-                                </View>
-                                <View style={styles.typePass} >
-                                    <TextInput
-                                        value={password}
-                                        onChangeText={(text) => setPassword(text)}
-                                        secureTextEntry={true}
-                                        style={styles.typePass}
-                                        placeholder='Password' />
-                                </View>
-                                <View style={styles.eye}>
-                                    <SimpleLineIcons name="eye" size={13} color="#B9B9B9" style={styles.eye} />
-                                </View>
-                            </View>
-                            <TouchableOpacity onPress={handleLogIn}>
-                                <Text style={styles.login}>Đăng Nhập</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('QuenMatKhau')}>
-                                <Text style={styles.forgetPassword}>Quên Mật Khẩu?</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <TouchableOpacity onPress={() => navigation.navigate('DangKy')}>
-                                <Text style={styles.signUp}>Chưa có tài khoản? Đăng ký</Text>
-                            </TouchableOpacity>
-                        </View>
+                    <View>
+                        <TouchableOpacity onPress={() => navigation.navigate('DangKy')}>
+                            <Text style={styles.signUp}>Chưa có tài khoản? Đăng ký</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
+            </View>
         </View>
     );
 };
@@ -120,12 +137,12 @@ const styles = StyleSheet.create({
         height: 450,
         alignSelf: 'center',
     },
-    pageName: {
-        ...TEXT,
-        marginTop: 50,
-        color: "#EA5C2B",
-        fontSize: 18,
-        fontWeight: "bold",
+    logo: {
+        width: '60%',
+        height: '12%',
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop: 20,
     },
     content: {
         width: '80%',
@@ -137,37 +154,33 @@ const styles = StyleSheet.create({
         height: 39,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: '#B9B9B9',
+        borderColor: '#7A7A7A',
     },
-    iconAccount: {
-        flex: 1,
-        top: 10,
-        left: 15,
+    icon: {
+        width: 40,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     typeAccount: {
-        fontSize: 12,
+        fontSize: 13,
         flex: 4,
-        color: '#B9B9B9',
-    },
-    iconPass: {
-        flex: 1,
-        top: 10,
-        left: 15,
+        color: '#7A7A7A',
     },
     typePass: {
-        fontSize: 12,
-        flex: 3,
-        color: '#B9B9B9',
+        fontSize: 13,
+        flex: 4,
+        color: '#7A7A7A',
     },
     eye: {
-        flex: 1,
-        top: 7,
-        left: 5
+        width: 40,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     login: {
         ...TEXT,
         height: 35,
         borderRadius: 12,
+        fontSize: 13,
         marginTop: 20,
         color: '#fff',
         backgroundColor: "#EA5C2B",
@@ -176,14 +189,16 @@ const styles = StyleSheet.create({
     forgetPassword: {
         ...TEXT,
         height: 35,
+        fontSize: 13,
         marginTop: 10,
-        color: '#B9B9B9',
+        color: '#7A7A7A',
         paddingTop: 7,
     },
     signUp: {
         ...TEXT,
         height: 35,
-        color: '#B9B9B9',
+        fontSize: 13,
+        color: '#7A7A7A',
         paddingTop: 7,
     },
 });
