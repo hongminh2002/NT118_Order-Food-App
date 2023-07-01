@@ -45,7 +45,7 @@ const OrderDetail = ({ cartList }) => {
                     <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 14, color: '#7A7A7A' }}>{'Số lượng: ' + item.qty}</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 14, }}>{item.price} VNĐ</Text>
+                    <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 14, }}>{VND.format(item.price)}</Text>
                 </View>
             </View>
         )
@@ -56,9 +56,13 @@ const OrderDetail = ({ cartList }) => {
         cartList.map(item => {
             total += item.price * item.qty;
         });
-        console.log(total);
         return total;
     };
+
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
 
     return (
         <View>
@@ -94,19 +98,19 @@ const OrderDetail = ({ cartList }) => {
                 <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 15, }}>Tổng cộng</Text>
                 <View style={{ flexDirection: 'row', paddingLeft: 10, justifyContent: 'space-between', }}>
                     <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>Tạm tính</Text>
-                    <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>{getTotal() + ' VNĐ'}</Text>
+                    <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>{VND.format(getTotal())}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', paddingLeft: 10, justifyContent: 'space-between', }}>
                     <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>Phí vận chuyển</Text>
-                    <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>12,000 VNĐ</Text>
+                    <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>12.000 đ</Text>
                 </View>
                 <View style={{ flexDirection: 'row', paddingLeft: 10, justifyContent: 'space-between', }}>
                     <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>Giảm giá</Text>
-                    <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>0 VNĐ</Text>
+                    <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 14, }}>0 đ</Text>
                 </View>
                 <View style={{ flexDirection: 'row', paddingLeft: 10, justifyContent: 'space-between', }}>
                     <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 14, }}>Số tiền thanh toán</Text>
-                    <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 14, }}>110,000 VNĐ</Text>
+                    <Text style={{ fontFamily: 'Roboto-Medium', fontSize: 14, }}>110.000 đ</Text>
                 </View>
             </View>
         </View>
