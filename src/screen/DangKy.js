@@ -40,6 +40,7 @@ const DangKy = ({ navigation }) => {
           birthday: '01/01/2000',
           cart: [],
           address: [],
+          orders: [],
         });
       })
       .catch((error) => {
