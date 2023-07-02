@@ -6,12 +6,12 @@ import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { auth, db, collection, addDoc, getDocs, updateDoc, doc, getDoc } from '../../../firebase'
 
 let myUserId = '';
-let email = '';
 
 const Footer = () => {
     const [selectedAddress, setSelectedAddress] = useState('Chọn một địa chỉ');
     const [selectedReceiver, setSelectedReceiver] = useState('');
     const [selectedMobile, setSelectedMobile] = useState('');
+    const [email, setEmail] = useState('');
     const [cartList, setCartList] = useState([]);
     const navigation = useNavigation();
     const isFocused = useIsFocused();
@@ -47,7 +47,7 @@ const Footer = () => {
     const getEmail = async () => {
         myUserId = auth.currentUser.uid;
         const docRef = await getDoc(doc(db, 'users', myUserId));
-        email = docRef.data().email;
+        setEmail(docRef.data().email);
     };
 
     const getTotal = () => {
@@ -107,7 +107,7 @@ const Footer = () => {
                             name: selectedReceiver,
                             mobile: selectedMobile,
                             email: email,
-                            paymentStatus: 0,
+                            paymentStatus: false,
                             });
                     }
                 }}
