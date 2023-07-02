@@ -6,6 +6,9 @@ import { auth, db, collection, addDoc, getDocs, updateDoc, doc, getDoc } from '.
 
 const OrderStatus = ({ navigation }) => {
     const route = useRoute();
+    const today = new Date();
+    const date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+    const time = today.getHours() + ":" + today.getMinutes();
 
     useEffect(() => {
         if (route.params.status == 'success') {
@@ -27,6 +30,9 @@ const OrderStatus = ({ navigation }) => {
             receiverMobile: route.params.mobile,
             orderTotal: route.params.total,
             paymentStatus: route.params.paymentStatus,
+            orderStatus: 'Chờ xác nhận',
+            orderDate: date,
+            orderTime: time,
         });
         await updateDoc(doc(db, 'users', `${myUserId}`), {
             cart: [],
