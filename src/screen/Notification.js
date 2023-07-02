@@ -9,7 +9,6 @@ export default function Notification(){
             <ScrollView>
                 <EachNoti />
             </ScrollView>
-            <BottomTab />
         </SafeAreaView>
     );
 }
