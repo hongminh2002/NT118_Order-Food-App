@@ -121,7 +121,15 @@ const ThongTin = () => {
                 visible={open}>
                 <View style={style.centeredView}>
                   <View style={style.modalView}>
-                    <DatePicker mode='calendar' visible={open} selected={startedDate} minimumDate={startDate} onDateChange={handleDateChange} onSelectedChange={date => setSelectedStartDate(date)} />
+                    <DatePicker
+                      mode='calendar'
+                      visible={open}
+                      selected={startedDate}
+                      minimumDate="01/01/1900"
+                      onDateChange={handleDateChange}
+                      onSelectedChange={date => setSelectedStartDate(date)}
+                      style={{ borderRadius: 12 }}
+                    />
                     <TouchableOpacity>
                       <Text style={{ color: 'white', paddingTop: 10, fontSize: 15, fontWeight: 'bold' }} onPress={handleDatePress}>Close</Text>
                     </TouchableOpacity>
@@ -140,7 +148,7 @@ const ThongTin = () => {
             </View>
             <View style={{ width: 180, borderWidth: 0.5, borderColor: "#B9B9B9" }}></View>
             <View style={{ height: 35, paddingTop: 10, paddingLeft: 33, flexDirection: 'row' }}>
-            <TextInput
+              <TextInput
                 value={userData ? userData.phone : ''}
                 onChangeText={(text) => setUserData({ ...userData, phone: text })}
                 style={style.text}
@@ -156,14 +164,14 @@ const ThongTin = () => {
             </View>
             <View style={{ width: 180, borderWidth: 0.5, borderColor: "#B9B9B9" }}></View>
             <View style={{ height: 35, paddingTop: 10, paddingLeft: 33, flexDirection: 'row' }}>
-              <Text style={{fontSize: 16, flex: 9, color: 'gray'}}>{userData.email}</Text> 
+              <Text style={{ fontSize: 16, flex: 9, color: 'gray' }}>{userData.email}</Text>
             </View>
             <View style={{ width: 400, borderWidth: 1, borderColor: "#B9B9B9" }}></View>
           </View>
 
         </View>
         <View>
-          <TouchableOpacity onPress = {handleUpdate} >
+          <TouchableOpacity onPress={handleUpdate} >
             <Text style={style.save}>Lưu thay đổi</Text>
           </TouchableOpacity>
         </View>
