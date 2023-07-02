@@ -81,20 +81,24 @@ const Account = () => {
           <View style={{ width: '100%', height: 0, borderWidth: 0.5, borderColor: "#B9B9B9" }}></View>
         </View>
         <View style={style.content}>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <FontAwesome name="shopping-bag" size={15} color="#EA5C2B" style={style.icon1} />
+          <TouchableOpacity style={{ flexDirection: 'row', flex: 1 }}>
+            <FontAwesome 
+              name="shopping-bag" 
+              size={15} color="#EA5C2B" 
+              style={style.icon1} 
+              onPress={() => navigation.navigate('OrderTracking')} />
             <Text style={style.text}>Đơn hàng</Text>
             <AntDesign name="right" size={12} color="black" style={style.icon2} />
-          </View>
+          </TouchableOpacity>
           <View style={{ width: '100%', height: 0, borderWidth: 0.5, borderColor: "#B9B9B9" }}></View>
         </View>
         
         <View style={style.content}>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
+          <TouchableOpacity style={{ flexDirection: 'row', flex: 1 }} onPress={() => navigation.navigate('Thông báo')}>
             <MaterialIcons name="notifications" size={15} color="#EA5C2B" style={style.icon1} />
             <Text style={style.text}>Thông báo</Text>
             <AntDesign name="right" size={12} color="black" style={style.icon2} />
-          </View>
+          </TouchableOpacity>
           <View style={{ width: '100%', height: 0, borderWidth: 0.5, borderColor: "#B9B9B9" }}></View>
         </View>
         <View style={style.content}>
