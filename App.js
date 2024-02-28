@@ -24,8 +24,8 @@ import QuenMatKhau from './src/screen/QuenMatKhau';
 // import Account from './src/screen/Account';
 
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const unsubscribe = auth.onAuthStateChanged((user) => {
+  const [loggedIn, setLoggedIn] = useState(subscribe);
+  const subscribe = auth.onAuthStateChanged((user) => {
     if (user) {
       setLoggedIn(true);
     } else {
