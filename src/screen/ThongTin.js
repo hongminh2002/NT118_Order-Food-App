@@ -80,7 +80,7 @@ const ThongTin = () => {
       <Image source={require('../asset/Nền3.png')} style={style.background2} />
       <View style={{ height: 51, flexDirection: 'row' }}>
         <View style={{ flex: 2 }}>
-          <FontAwesome onPress={() => navigation.navigate('Account')} name="user-circle-o" size={40} color="white" style={{
+          <FontAwesome onPress={() => navigation.goBack()} name="user-circle-o" size={40} color="white" style={{
             left: 20,
           }} />
         </View>
